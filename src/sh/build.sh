@@ -1,0 +1,1 @@
+clear && ./image-versionup.sh && ./image-build.sh

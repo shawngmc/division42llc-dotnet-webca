@@ -1,0 +1,20 @@
+<section class="page-header">
+    <h3><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;New Leaf Certificates</h3>
+    <small>
+        Use the area below to create a new leaf certificate.
+    </small>
+</section>
+<br>
+<div ng-if="caCertValid!==true">
+    <div class="alert alert-info">
+        <i class="fa fa-info-circle" aria-hidden="true"></i> You do not currently have a Certificate Authority certificate set up. You must complete that step first, before you can generate leaf certificates.
+    </div>
+    <p>
+        <a href="#/ca" class="btn btn-primary"><i class="fa fa-certificate" aria-hidden="true"></i>&nbsp;Setup CA</a>
+    </p>
+
+</div>
+
+<div ng-if="caCertValid===true">
+    <h3>Certificate Details</h3>
+</div>

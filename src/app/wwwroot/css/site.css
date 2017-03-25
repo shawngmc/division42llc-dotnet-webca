@@ -1,0 +1,25 @@
+body {
+    padding-top: 5rem;
+    font-size: .9em;
+    /*font-family: "open sans", "helvetica neue", verdana, tahoma, arial !important;*/
+}
+
+footer {
+    background-color: #eeeeee;
+    font-size: .85em;
+    color: #7d7d7d;
+    padding: 2px;
+    text-align: center;
+}
+
+section.page-header {
+    border-bottom: solid 1px #dddddd;
+    padding-bottom: 0;
+    margin-bottom: 10px;
+}
+
+form.bordered {
+    padding-top: 10px;
+    border-top: solid 1px #dddddd;
+    border-bottom: solid 1px #dddddd;
+}

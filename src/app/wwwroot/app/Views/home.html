@@ -1,0 +1,45 @@
+<section class="page-header">
+    <h3><i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;Welcome to webCA</h3>
+    <small>
+        Use the area below to learn about this application.
+    </small>
+</section>
+<br>
+<div ng-if="caCertValid!==true">
+    <div class="alert alert-info">
+        <i class="fa fa-info-circle" aria-hidden="true"></i> You do not currently have a Certificate Authority certificate set up. You must complete that step first, before you can generate leaf certificates.
+    </div>
+    <p>
+        <a href="#/ca" class="btn btn-primary"><i class="fa fa-certificate" aria-hidden="true"></i>&nbsp;Setup CA</a>
+    </p>
+
+</div>
+
+<div ng-if="caCertValid===true">
+    <div class="jumbotron" style="padding-top: 25px; padding-bottom: 25px">
+        <h4>About your Certificate Authority</h4>
+        <p>
+            This Certificate Authority (CA) has successfully been set up. You may now generate new certificates. If you are done with your project, or want to change this CA, you can also destroy the CA and all leaf certificates, and start over.
+        </p>
+        <hr>
+        <h5>Create a new Leaf Certificate</h5>
+        <p>
+            Now that your CA is set, you may now generate certificates for servers. To begin, click the button below.
+        </p>
+        <p>
+            <a href="#/leafcerts/new" class="btn btn-success"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Add New Leaf Certificate</a>
+            <a href="#/leafcerts" class="btn btn-primary"><i class="fa fa-list" aria-hidden="true"></i>&nbsp;View Existing Leaf Certificates</a>
+
+        </p>
+        <hr>
+        <h5>Manage Your CA</h5>
+        <p>
+            Now that your CA is set, you may now view the details of the CA certificate. You will also be given the chance to destroy this CA and start over again. To begin, click the button below.
+        </p>
+        <p>
+            <a href="#/ca" class="btn btn-primary"><i class="fa fa-certificate" aria-hidden="true"></i>&nbsp;View CA</a>
+        </p>
+
+
+    </div>
+</div>
