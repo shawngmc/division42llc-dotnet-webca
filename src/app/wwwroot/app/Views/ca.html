@@ -1,0 +1,268 @@
+<section class="page-header">
+    <h3><i class="fa fa-certificate" aria-hidden="true"></i>&nbsp;Certificate Authority</h3>
+    <small>
+        Use the area below to view, create, or recreate your CA certificate.
+    </small>
+</section>
+<br>
+<div ng-if="caCertValid!==true">
+    <h5>Getting Started...</h5>
+    <p>
+        You do not currently have a Certificate Authority certificate set up. Fill out the form below and click "Create CA" to generate your CA certificate. Once you do that, you will be able to generate "leaf certificates" for your servers, from the
+        <a href="#/leafcerts/new">New Cert</a> tab.
+    </p>
+
+    <form class="bordered">
+        <div class="form-group row" ng-class="(request.fqdn ? 'has-success' : 'has-danger')">
+            <label for="inputFQDN" class="col-sm-2 col-form-label">FQDN</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" ng-disabled="isLoading===true" ng-class="(request.fqdn ? 'form-control-success' : 'form-control-danger')" id="inputFQDN" placeholder="ca.example.com" required ng-model="request.fqdn">
+                <small class="form-text text-muted">The fully qualified domain name of your CA.</small>
+            </div>
+        </div>
+        <div class="form-group row" ng-class="(request.organization ? 'has-success' : 'has-danger')">
+            <label for="inputOrganization" class="col-sm-2 col-form-label">Organization Name</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" ng-disabled="isLoading===true" ng-class="(request.organization ? 'form-control-success' : 'form-control-danger')" id="inputOrganization" placeholder="ExampleCorp LLC" required ng-model="request.organization">
+                <small class="form-text text-muted">The name of your company or organization.</small>
+            </div>
+        </div>
+        <div class="form-group row" ng-class="(request.city ? 'has-success' : 'has-danger')">
+            <label for="inputCity" class="col-sm-2 col-form-label">City</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" ng-disabled="isLoading===true" ng-class="(request.city ? 'form-control-success' : 'form-control-danger')" id="inputCity" placeholder="Seattle" required ng-model="request.city">
+                <small class="form-text text-muted">The city where you are located.</small>
+            </div>
+        </div>
+        <div class="form-group row" ng-class="(request.stateCode ? 'has-success' : 'has-danger')">
+            <label for="inputStateCode" class="col-sm-2 col-form-label">State Code</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" ng-disabled="isLoading===true" maxlength="2" ng-class="(request.stateCode ? 'form-control-success' : 'form-control-danger')" id="inputStateCode" placeholder="WA" required ng-model="request.stateCode">
+                <small class="form-text text-muted">The state or province code where you are located.</small>
+            </div>
+        </div>
+        <div class="form-group row" ng-class="(request.countryCode ? 'has-success' : 'has-danger')">
+            <label for="inputCountry" class="col-sm-2 col-form-label">Country Code</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" ng-disabled="isLoading===true" maxlength="2" ng-class="(request.countryCode ? 'form-control-success' : 'form-control-danger')" id="inputCountry" placeholder="US" required ng-model="request.countryCode">
+                <small class="form-text text-muted">The country code where you are located.</small>
+            </div>
+        </div>
+        <div class="form-group row" ng-class="(request.emailAddress ? 'has-success' : 'has-danger')">
+            <label for="inputEmail" class="col-sm-2 col-form-label">Email Address</label>
+            <div class="col-sm-10">
+                <input type="email" class="form-control" ng-disabled="isLoading===true" ng-class="(request.emailAddress ? 'form-control-success' : 'form-control-danger')" id="inputEmail" placeholder="jdoe@example.com" required ng-model="request.emailAddress">
+                <small class="form-text text-muted">The e-mail address associated with this CA.</small>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="offset-sm-2 col-sm-10">
+                <button class="btn btn-success" ng-disabled="isLoading===true" title="Click to generate a new CA certificate now" ng-disabled="!(request.fqdn && request.organization && request.city && request.stateCode && request.countryCode && request.emailAddress)"
+                    ng-click="createCA()">
+                    <i class="fa fa-plus" aria-hidden="true" ng-hide="isLoading===true"></i>
+                    <i class="fa fa-spinner fa-spin" ng-show="isLoading===true"></i>
+                    &nbsp;Create CA
+                </button>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<div ng-if="caCertValid===true">
+
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#subject" role="tab"> <i class="fa fa-building" aria-hidden="true"></i> subject</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#issuer" role="tab"> <i class="fa fa-sitemap" aria-hidden="true"></i> issuer</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#dates" role="tab"> <i class="fa fa-calendar" aria-hidden="true"></i> dates</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#cert" role="tab"> <i class="fa fa-code" aria-hidden="true"></i> public key</a>
+        </li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div class="tab-pane active" id="subject" role="tabpanel">
+
+
+
+        </div>
+
+        <div class="tab-pane" id="issuer" role="tabpanel">
+
+            <fieldset>
+                <legend><small class="text-muted">issuer certificate details</small></legend>
+                <table class="table table-bordered table-sm table-hover table-condensed table-striped table-responsive">
+                    <tr>
+                        <th>Common Name</th>
+                        <td>{{ ca.issuer.CN }}</td>
+                    </tr>
+                    <tr>
+                        <th>Organization</th>
+                        <td>{{ ca.issuer.O }}</td>
+                    </tr>
+                    <tr>
+                        <th>Department</th>
+                        <td>{{ ca.issuer.OU }}</td>
+                    </tr>
+                    <tr>
+                        <th>City</th>
+                        <td>{{ ca.issuer.L }}</td>
+                    </tr>
+                    <tr>
+                        <th>State/Province</th>
+                        <td>{{ ca.issuer.ST }}</td>
+                    </tr>
+                    <tr>
+                        <th>Country</th>
+                        <td>{{ ca.issuer.C }}</td>
+                    </tr>
+                </table>
+
+            </fieldset>
+
+        </div>
+
+
+
+
+
+
+        <div class="tab-pane " id="dates" role="tabpanel">
+
+            <fieldset>
+                <legend><small class="text-muted">dates valid</small></legend>
+                <table class="table table-bordered table-sm table-hover table-condensed table-striped table-responsive">
+                    <tr>
+                        <th scope="row">Valid From</th>
+                        <td>{{ ca.issued }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Valid To</th>
+                        <td>{{ ca.expires }}</td>
+                    </tr>
+                </table>
+            </fieldset>
+
+        </div>
+
+        <div class="tab-pane container" id="cert" role="tabpanel">
+
+            <fieldset>
+                <legend><small class="text-muted">certificate</small></legend>
+
+
+                <div class="card row" style="max-height: 200px; overflow:scroll;">
+                    <div class="card-block">
+                        <pre>{{ ca.certificate }}</pre>
+                    </div>
+                </div>
+
+                <a href="/api/cert/{{ ca.thumbprint }}" class="pull-right text-sm text-muted"> <i class="fa fa-download" aria-hidden="true"></i> Download</a>
+            </fieldset>
+        </div>
+    </div>
+
+
+    <fieldset>
+        <legend><small class="text-muted">subject certificate details</small></legend>
+
+        <table class="table table-bordered table-hover table-condensed table-striped table-sm">
+            <tr>
+                <th>Common Name</th>
+                <td>{{ ca.subject.CN }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Organization</th>
+                <td>{{ ca.subject.O }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Department</th>
+                <td>{{ ca.subject.OU }}</td>
+            </tr>
+            <tr>
+                <th scope="row">City</th>
+                <td>{{ ca.subject.L }}</td>
+            </tr>
+            <tr>
+                <th scope="row">State/Province</th>
+                <td>{{ ca.subject.ST }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Country</th>
+                <td>{{ ca.subject.C }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Valid From</th>
+                <td>{{ ca.issued }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Valid To</th>
+                <td>{{ ca.expires }}</td>
+            </tr>
+
+            <tr>
+                <th scope="row">Version</th>
+                <td>{{ ca.version }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Serial Number</th>
+                <td>{{ ca.serial }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Signature Algorithm</th>
+                <td><span class="badge badge-success"> <i class="fa fa-lock" aria-hidden="true"></i>&nbsp;{{ ca.signatureAlgorithm }}</span></td>
+            </tr>
+            <tr>
+                <th scope="row">Public Key Algorithm</th>
+                <td><span class="badge badge-success"><i class="fa fa-lock" aria-hidden="true"></i>&nbsp;{{ ca.publicKeyAlgorithm }}</span></td>
+            </tr>
+            <tr>
+                <th scope="row">Key Size</th>
+                <td><span class="badge badge-pill badge-primary"> <i class="fa fa-key" aria-hidden="true"></i>&nbsp;{{ ca.keySize }}</span></td>
+            </tr>
+            <tr>
+                <th scope="row">Thumbprint</th>
+                <td>{{ ca.thumbprint }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Public Key</th>
+                <td><pre>{{ ca.certificate }}</pre></td>
+            </tr>
+        </table>
+
+        <table class="table table-bordered table-sm" style="width:80%; margin-left:20px;margin-right:50px; background-color: #ddddee; font-size: .8em;">
+            <tr>
+                <th>issuer</th>
+                <td>{{ ca.issuerDN }}</td>
+            </tr>
+            <tr>
+                <th>authority key identifier</th>
+                <td>{{ ca.issuerIdentifier }}</td>
+            </tr>
+        </table>
+    </fieldset>
+
+
+    <script>
+        $().ready(function() {
+            $('li.nav-item a[role=tab]').click(function(e) {
+                e.preventDefault()
+                $(this).tab('show')
+            })
+        });
+    </script>
+
+    <hr>
+    <div class="pull-right">
+        <button class="btn btn-danger" ng-click="createCA()"><i class="fa fa-minus-circle"></i> Permanently Destroy<button>
+    </div>
+</div>
