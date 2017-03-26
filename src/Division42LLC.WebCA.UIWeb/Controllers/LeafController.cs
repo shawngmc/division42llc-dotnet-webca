@@ -1,44 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Cryptography.X509Certificates;
 using Division42LLC.WebCA.CA;
 using Division42LLC.WebCA.Extensions;
+using Division42LLC.WebCA.Models;
 
-namespace app.Controllers
+// For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+
+namespace Division42LLC.WebCA.UIWeb.Controllers
 {
     [Route("api/[controller]/[action]")]
-    public class CAController : Controller
+    public class LeafController : Controller
     {
+        [Route("api/leaf/get/{thumbprint}")]
         [HttpGet]
-        public dynamic Wipe()
+        public dynamic Get(String thumbprint)
         {
-            Console.WriteLine("GET /api/ca/wipe");
+            Console.WriteLine($"GET /api/leaf/get/{thumbprint}");
             CAManager caManager = new CAManager();
 
-            try
-            {
-                Directory.Delete(CAStorePathInfo.CARootPath, true);
-                return new { status = "OK" };
-            }
-            catch(Exception exception)
-            {
-                return new { status = "FAIL", message=exception.Message };
-            }
-            
-        }
-
-        [HttpGet]
-        public dynamic Get()
-        {
-            Console.WriteLine("GET /api/ca/get");
-            CAManager caManager = new CAManager();
-
-            var cert = caManager.GetCACertificate();
+            var cert = caManager.GetLeafCertificate(thumbprint);
             if (cert == null)
                 return new { status = "Certificate not present." };
             else
@@ -54,11 +37,26 @@ namespace app.Controllers
             }
         }
 
+        [HttpGet]
+        public dynamic GetAll()
+        {
+            Console.WriteLine("GET /api/leaf/getall");
+            CAManager caManager = new CAManager();
+
+            IEnumerable<CertificateEntry> certs = caManager.GetAllLeafCertificates();
+            if (certs == null || certs.Count() == 0)
+                return new { status = "Certificates not present." };
+            else
+            {
+                return certs;
+            }
+        }
+
         // POST api/values
         [HttpPost]
         public void Create([FromBody]dynamic request)
         {
-            Console.WriteLine("POST /api/ca/create");
+            Console.WriteLine("POST /api/leaf/create");
 
             CAManager caManager = new CAManager();
 
@@ -70,9 +68,10 @@ namespace app.Controllers
             String countryCode = request.countryCode;
             String password = null;
 
-            caManager.GenerateNewCACertificate(name, organization, organizationalUnit, city, stateCode, countryCode, password);
+            caManager.GenerateNewLeafCertificate(name, organization, organizationalUnit, city, stateCode, countryCode, password);
+
+            //return Ok();
 
         }
-
     }
 }

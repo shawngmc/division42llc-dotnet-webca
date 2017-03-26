@@ -7,8 +7,10 @@ LABEL Comment="Standard microsoft/aspnetcore:latest image with openssl, and a cu
 COPY docker-entrypoint.sh /usr/local/bin
 
 ADD Division42LLC.WebCA.UIWeb/bin/Debug/netcoreapp1.1/publish/ /app
-ADD app-name.txt /app
-ADD app-version.txt /app
+ADD app-name.txt /app/
+ADD app-version.txt /app/
+ADD sample-cert.pfx /var/localCA/CA/
+ADD sample-cert.pfx /var/localCA/leaf/
 
 RUN echo "[*] Updating Aptitude..." && \
     apt-get update && \

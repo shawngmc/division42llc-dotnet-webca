@@ -76,6 +76,11 @@ namespace Division42LLC.WebCA.x509
             return ConvertCertificate(certificate, subjectKeyPair, random);
         }
 
+        internal X509Certificate2 IssueCertificate(string subjectDN, object issuerCertificate, object issuerPrivateKey, string[] subjectAlternativeNames, KeyPurposeID[] usages)
+        {
+            throw new NotImplementedException();
+        }
+
         public X509Certificate2 CreateSelfSignedCertificate(string subjectName, string[] subjectAlternativeNames, KeyPurposeID[] usages)
         {
             // It's self-signed, so these are the same.
@@ -154,6 +159,8 @@ namespace Division42LLC.WebCA.x509
 
             if (subjectAlternativeNames != null && subjectAlternativeNames.Any())
                 AddSubjectAlternativeNames(certificateGenerator, subjectAlternativeNames);
+
+            
 
             // The certificate is signed with the issuer's private key.
             var certificate = certificateGenerator.Generate(issuerKeyPair.Private, random);

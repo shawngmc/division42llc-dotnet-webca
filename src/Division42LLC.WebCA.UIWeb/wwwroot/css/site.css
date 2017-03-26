@@ -23,3 +23,65 @@ form.bordered {
     border-top: solid 1px #dddddd;
     border-bottom: solid 1px #dddddd;
 }
+
+.text-sm{
+    font-size: .8em;
+}
+
+/* Backgrounds ------------------ */
+.bg-bright {
+    background-color: #FFF;
+}
+
+.bg-dark {
+    background-color: #DCE5EF;
+}
+
+.bg-gradient-blue {
+    background-color: #52b2f6; /* IE9 fallback */
+    background: -webkit-linear-gradient(#2d8dd1, #52b2f6);
+    background: -o-linear-gradient(#2d8dd1, #52b2f6);
+    background: -moz-linear-gradient(#2d8dd1, #52b2f6);
+    background: linear-gradient(#2d8dd1, #52b2f6);
+}
+
+.bg-gradient-brown {
+    background-color: #c28500; /* IE9 fallback */
+    background: -webkit-linear-gradient(#b26d09, #c28500);
+    background: -o-linear-gradient(#b26d09, #c28500);
+    background: -moz-linear-gradient(#b26d09, #c28500);
+    background: linear-gradient(#b26d09, #c28500);
+}
+
+.bg-gradient-green {
+    background-color: #8ab73b; /* IE9 fallback */
+    background: -webkit-linear-gradient(#81a02b, #8ab73b);
+    background: -o-linear-gradient(#81a02b, #8ab73b);
+    background: -moz-linear-gradient(#81a02b, #8ab73b);
+    background: linear-gradient(#81a02b, #8ab73b);
+}
+
+.bg-gradient-red {
+    background-color: #c9302c; /* IE9 fallback */
+    background: -webkit-linear-gradient( #ff7d7d,#c9302c);
+    background: -o-linear-gradient( #ff7d7d,#c9302c);
+    background: -moz-linear-gradient( #ff7d7d,#c9302c);
+    background: linear-gradient( #ff7d7d,#c9302c);
+    color: white;
+}
+
+.bg-gradient-orange {
+    background-color: #f6a000; /* IE9 fallback */
+    background: -webkit-linear-gradient(#e08c05, #f6a000);
+    background: -o-linear-gradient(#e08c05, #f6a000);
+    background: -moz-linear-gradient(#e08c05, #f6a000);
+    background: linear-gradient(#e08c05, #f6a000);
+}
+
+.bg-gradient-turquoise {
+    background-color: #17b9b6; /* IE9 fallback */
+    background: -webkit-linear-gradient(#0baaa2, #17b9b6);
+    background: -o-linear-gradient(#0baaa2, #17b9b6);
+    background: -moz-linear-gradient(#0baaa2, #17b9b6);
+    background: linear-gradient(#0baaa2, #17b9b6);
+}

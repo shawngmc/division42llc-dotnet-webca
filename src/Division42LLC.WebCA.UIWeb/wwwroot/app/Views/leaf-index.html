@@ -16,5 +16,29 @@
 </div>
 
 <div ng-if="caCertValid===true">
-    <h3>Certificate Details</h3>
+    <p style="margin-top: -20px">
+        You currently have a Certificate Authority set up. Below are the existing certificates which have 
+        already been issued from this CA. Click to view, download, or delete an existing certificate. Or, 
+        click below to generate a leaf certificate for your servers, from the
+        <a href="#/leafcerts/new">New Cert</a> tab.
+    </p>
+    <table class="table table-condensed table-bordered table-striped">
+        <tr>
+            <th>Subject</th>
+            <th>Thumbprint</th>
+            <th colspan="2">Expires</th>
+        </tr>
+        <tr ng-repeat="cert in certs">
+            <td title="{{ cert.distinguishedName }}"><i class="fa fa-certificate"></i>&nbsp;{{ cert.distinguishedNameDetails.commonName}}</td>
+            <td>{{ cert.thumbprint }}<p class="text-sm text-muted">Serial: {{ cert.serialNumber }}</p></td>
+            <td>{{ cert.expiresOn | date:mm/dd/yyyy }}</td>
+            <td>
+                <button class="btn btn-sm btn-default"><i class="fa fa-download"></i></button>
+                <button class="btn btn-sm btn-primary"><i class="fa fa-pencil"></i></button>
+                <button class="btn btn-sm btn-danger"><i class="fa fa-minus-circle"></i></button>
+            </td>
+        </tr>
+    </table>
+    <hr />
+    <a href="#/leafcerts/new" class="btn btn-success pull-right"><i class="fa fa-plus"></i>&nbsp;Add Certificate</a>
 </div>

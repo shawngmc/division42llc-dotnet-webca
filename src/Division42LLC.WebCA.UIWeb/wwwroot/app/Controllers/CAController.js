@@ -6,45 +6,40 @@
 
         $scope.isLoading = false;
         $scope.request = {};
-
-        var onGetSuccess = function(response) {
-            $rootScope.ca = response;
-
-            $rootScope.ca.certificate = response.certificate
-                .replace("BEGIN|CERT", "BEGIN CERT")
-                .replace("END|CERT", "END CERT")
-                .replace(new RegExp("|", 'g'), "\n\n\n");
-            alert($rootScope.ca.certificate);
+        
+        var onCreateSuccess = function(response) {
             $scope.isLoading = false;
-            $rootScope.caCertValid = response.isValid;
+
+            $rootScope.refreshCA();
         };
 
-        var onPostSuccess = function(response) {
-            $rootScope.ca = response;
+        var onWipeSuccess = function (response) {
             $scope.isLoading = false;
-            //$rootScope.caCertValid = response.isValid;
 
-            $scope.getCurrent();
+            $rootScope.refreshCA();
         };
 
         var onError = function(response) {
             $scope.error = response;
             $scope.isLoading = false;
-            $rootScope.caCertValid = false;
+
+            $rootScope.refreshCA();
         };
-
-        $scope.getCurrent = function() {
-            $scope.isLoading = true;
-
-            RestService.get("/api/ca")
-                .then(onGetSuccess, onError);
-        };
-
+        
         $scope.createCA = function() {
             $scope.isLoading = true;
 
-            RestService.post("/api/ca/init", $scope.request)
-                .then(onPostSuccess, onError);
+            RestService.post("/api/ca/create", $scope.request)
+                .then(onCreateSuccess, onError);
+
+        };
+
+        $scope.wipeCA = function () {
+            $scope.isLoading = true;
+
+            $(".modal").hide();
+            RestService.get("/api/ca/wipe")
+                .then(onWipeSuccess, onError);
 
         };
     };

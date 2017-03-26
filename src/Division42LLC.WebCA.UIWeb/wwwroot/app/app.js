@@ -34,14 +34,20 @@
                 $rootScope.uptime = data.uptime;
             });
 
-        RestService.get("/api/ca")
-            .then(function(response) {
-                $rootScope.ca = response;
-                $rootScope.caCertValid = response.isValid;
+        $rootScope.refreshCA = function () {
+            RestService.get("/api/ca/get")
+                .then(function (response) {
+                    $rootScope.ca = response;
 
-                $rootScope.ca.certificate = response.certificate
-                    .replace(/~/g, '\n');
-            });
+                    if (response.status === "OK") {
+                        $rootScope.caCertValid = true;
+                    } else {
+                        $rootScope.caCertValid = false;
+                    }
+                });
+        }
+
+        $rootScope.refreshCA();
     });
 
 }());

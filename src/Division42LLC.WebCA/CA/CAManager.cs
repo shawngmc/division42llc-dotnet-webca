@@ -7,6 +7,8 @@ using System.Security;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using Division42LLC.WebCA.Models;
+using Division42LLC.WebCA.Extensions;
 
 namespace Division42LLC.WebCA.CA
 {
@@ -20,6 +22,21 @@ namespace Division42LLC.WebCA.CA
                 //RSA caPrivateKeyFromFile = caCertFromFile.GetRSAPrivateKey();
 
                 return caCertFromFile;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public X509Certificate2 GetLeafCertificate(String thumbprint, String password = null)
+        {
+            String leafPathAndFilename = Path.Combine(CAStorePathInfo.LeafCertPath, $"{thumbprint}.pfx");
+            if (Directory.Exists(CAStorePathInfo.LeafCertPath) && File.Exists(leafPathAndFilename))
+            {
+                X509Certificate2 certificate = new X509Certificate2(leafPathAndFilename, password);
+
+                return certificate;
             }
             else
             {
@@ -59,6 +76,65 @@ namespace Division42LLC.WebCA.CA
             }
         }
 
+        public void GenerateNewLeafCertificate(string name, string organization, string organizationalUnit, string city, string stateCode, string countryCode, string password)
+        {
+            if (!Directory.Exists(CAStorePathInfo.CACertPath))
+                Directory.CreateDirectory(CAStorePathInfo.CACertPath);
+
+            CertificateGenerator generator = new CertificateGenerator();
+
+            String subjectDN = $"CN={name},O={organization},OU={organizationalUnit},L={city},C={countryCode},ST={stateCode}";
+            String[] subjectAlternativeNames = new List<String>().ToArray();
+
+            KeyPurposeID[] usages = new List<KeyPurposeID>() { KeyPurposeID.AnyExtendedKeyUsage }.ToArray();
+
+            X509Certificate2 issuerCertificate = GetCACertificate();
+            AsymmetricAlgorithm issuerPrivateKey = issuerCertificate.GetRSAPrivateKey();
+
+            X509Certificate2 certForCA = generator.IssueCertificate(subjectDN, issuerCertificate, issuerPrivateKey, subjectAlternativeNames, usages);
+
+
+            try
+            {
+                String leafPathAndFilename = Path.Combine(CAStorePathInfo.LeafCertPath, $"{certForCA.Thumbprint}.pfx");
+
+                File.WriteAllBytes(leafPathAndFilename, certForCA.Export(X509ContentType.Pfx, password));
+                Console.WriteLine("PFX/PKCS12: SUCCESS");
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine("PFX/PKCS12: " + exception.Message);
+            }
+        }
+
+        public IEnumerable<CertificateEntry> GetAllLeafCertificates()
+        {
+            //String leafPathAndFilename = Path.Combine(CAStorePathInfo.LeafCertPath, $"{thumbprint}.pfx");
+            if (Directory.Exists(CAStorePathInfo.LeafCertPath))
+            {
+                IEnumerable<String> leafCertificateFiles = Directory.EnumerateFiles(CAStorePathInfo.LeafCertPath, "*.pfx");
+                foreach (String leafCertificateFile in leafCertificateFiles)
+                {
+                    X509Certificate2 certificate = new X509Certificate2(leafCertificateFile, null);
+
+                    yield return new CertificateEntry()
+                    {
+                        DistinguishedName = certificate.Subject,
+                        ExpiresOn = certificate.NotAfter,
+                        IssuedOn = certificate.NotBefore,
+                        SerialNumber = certificate.SerialNumber,
+                        Thumbprint = certificate.Thumbprint,
+                        PublicKey = certificate.ExportToPEM(),
+                        DistinguishedNameDetails = certificate.ExtractDNFields()
+                    };
+                }
+            }
+            else
+            {
+                yield return null;
+            }
+        }
+
         public void GenerateNewCACertificate(String name, String organization = "AutoCA",
             String organizationalUnit = "IT Security", String city = "Tampa",
             String stateCode = "FL", String countryCode = "US", String privateKeyPassword = null)
@@ -79,7 +155,7 @@ namespace Division42LLC.WebCA.CA
             //C countryName
             //UID userid
 
-            String subjectDN = $"CN={name},O={organization},OU={organizationalUnit},L={city},C={countryCode}"; //,ST={stateCode}";
+            String subjectDN = $"CN={name},O={organization},OU={organizationalUnit},L={city},C={countryCode},ST={stateCode}";
             String[] subjectAlternativeNames =
                 new List<String>().ToArray();
 
@@ -88,8 +164,55 @@ namespace Division42LLC.WebCA.CA
 
             X509Certificate2 certForCA = generator.CreateCertificateAuthorityCertificate(subjectDN, subjectAlternativeNames, usages);
 
-            File.WriteAllBytes(CAStorePathInfo.CACertPathAndFileName, certForCA.Export(X509ContentType.SerializedCert, privateKeyPassword));
+            //try
+            //{
+            //    File.WriteAllBytes(CAStorePathInfo.CACertPathAndFileName, certForCA.Export(X509ContentType.SerializedCert, privateKeyPassword));
+            //    Console.WriteLine("Serialized: SUCCESS");
+            //}
+            //catch (Exception exception)
+            //{
+            //    Console.WriteLine("Serialized: " + exception.Message);
+            //}
 
+            //try
+            //{
+            //    File.WriteAllBytes(CAStorePathInfo.CACertPathAndFileName + ".auth", certForCA.Export(X509ContentType.Authenticode, privateKeyPassword));
+            //    Console.WriteLine("Authenticode: SUCCESS");
+            //}
+            //catch (Exception exception)
+            //{
+            //    Console.WriteLine("Authenticode: " + exception.Message);
+            //}
+
+            //try
+            //{
+            //    File.WriteAllBytes(CAStorePathInfo.CACertPathAndFileName + ".crt", certForCA.Export(X509ContentType.Cert, privateKeyPassword));
+            //    Console.WriteLine("Cert: SUCCESS");
+            //}
+            //catch (Exception exception)
+            //{
+            //    Console.WriteLine("Cert: " + exception.Message);
+            //}
+
+            try
+            {
+                File.WriteAllBytes(CAStorePathInfo.CACertPathAndFileName, certForCA.Export(X509ContentType.Pfx, privateKeyPassword));
+                Console.WriteLine("PFX/PKCS12: SUCCESS");
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine("PFX/PKCS12: " + exception.Message);
+            }
+
+            //try
+            //{
+            //    File.WriteAllBytes(CAStorePathInfo.CACertPathAndFileName + ".p7b", certForCA.Export(X509ContentType.Pkcs7, privateKeyPassword));
+            //    Console.WriteLine("P7B: SUCCESS");
+            //}
+            //catch (Exception exception)
+            //{
+            //    Console.WriteLine("P7B: " + exception.Message);
+            //}
         }
 
         public String GetCARootFolder()

@@ -16,5 +16,89 @@
 </div>
 
 <div ng-if="caCertValid===true">
-    <h3>Certificate Details</h3>
+    <p>
+        You currently have a Certificate Authority set up. To generate a new leaf certificate, signed by your CA,
+        fill out the form below and click "Create Certificate".
+    </p>
+
+    <form class="bordered">
+        <div class="form-group row" ng-class="(request.fqdn ? 'has-success' : 'has-danger')">
+            <label for="inputFQDN" class="col-sm-2 col-form-label">FQDN</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control form-control-sm" ng-disabled="isLoading===true"
+                       ng-class="(request.fqdn ? 'form-control-success' : 'form-control-danger')"
+                       id="inputFQDN" placeholder="(e.g. ca.example.com)" required ng-model="request.fqdn">
+                <small class="form-text text-muted">The fully qualified domain name of your CA.</small>
+            </div>
+        </div>
+        <div class="form-group row" ng-class="(request.organization ? 'has-success' : 'has-danger')">
+            <label for="inputOrganization" class="col-sm-2 col-form-label">Organization Name</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control form-control-sm" ng-disabled="isLoading===true"
+                       ng-class="(request.organization ? 'form-control-success' : 'form-control-danger')"
+                       id="inputOrganization" placeholder="(e.g. ExampleCorp LLC)" required ng-model="request.organization">
+                <small class="form-text text-muted">The name of your company or organization.</small>
+            </div>
+        </div>
+        <div class="form-group row" ng-class="(request.organizationalUnit ? 'has-success' : 'has-danger')">
+            <label for="inputOrganizationalUnit" class="col-sm-2 col-form-label">Organizationl Unit</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control form-control-sm" ng-disabled="isLoading===true"
+                       ng-class="(request.organizationalUnit ? 'form-control-success' : 'form-control-danger')"
+                       id="inputOrganizationalUnit" placeholder="(e.g. IT Security)" required ng-model="request.organizationalUnit">
+                <small class="form-text text-muted">The area or department within your company or organization.</small>
+            </div>
+        </div>
+        <div class="form-group row" ng-class="(request.city ? 'has-success' : 'has-danger')">
+            <label for="inputCity" class="col-sm-2 col-form-label">City</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control form-control-sm" ng-disabled="isLoading===true"
+                       ng-class="(request.city ? 'form-control-success' : 'form-control-danger')"
+                       id="inputCity" placeholder="(e.g. Seattle)" required ng-model="request.city">
+                <small class="form-text text-muted">The city where you are located.</small>
+            </div>
+        </div>
+        <div class="form-group row" ng-class="(request.stateCode ? 'has-success' : 'has-danger')">
+            <label for="inputStateCode" class="col-sm-2 col-form-label">State Code</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control form-control-sm" ng-disabled="isLoading===true" maxlength="2"
+                       ng-class="(request.stateCode ? 'form-control-success' : 'form-control-danger')"
+                       id="inputStateCode" placeholder="(e.g. WA)" required ng-model="request.stateCode">
+                <small class="form-text text-muted">The state or province code where you are located.</small>
+            </div>
+        </div>
+        <div class="form-group row" ng-class="(request.countryCode ? 'has-success' : 'has-danger')">
+            <label for="inputCountry" class="col-sm-2 col-form-label">Country Code</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control form-control-sm" ng-disabled="isLoading===true" maxlength="2"
+                       ng-class="(request.countryCode ? 'form-control-success' : 'form-control-danger')"
+                       id="inputCountry" placeholder="(e.g. US)" required ng-model="request.countryCode">
+                <small class="form-text text-muted">The country code where you are located.</small>
+            </div>
+        </div>
+
+        <div class="form-group row" ng-class="(request.emailAddress ? 'has-success' : 'has-danger')">
+            <label for="inputEmail" class="col-sm-2 col-form-label">Email Address</label>
+            <div class="col-sm-10">
+                <input type="email" class="form-control form-control-sm" ng-disabled="isLoading===true"
+                       ng-class="(request.emailAddress ? 'form-control-success' : 'form-control-danger')"
+                       id="inputEmail" placeholder="(e.g. jdoe@example.com)" required ng-model="request.emailAddress">
+                <small class="form-text text-muted">The e-mail address associated with this CA.</small>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="offset-sm-2 col-sm-10">
+                <button class="btn btn-success" title="Click to generate a new leaf certificate now"
+                        ng-disabled="isLoading===true || !(request.fqdn && request.organization && request.organizationalUnit && request.city && request.stateCode && request.countryCode && request.emailAddress)"
+                        ng-click="createLeaf()">
+                    <i class="fa fa-plus" aria-hidden="true" ng-hide="isLoading===true"></i>
+                    <i class="fa fa-spinner fa-spin" ng-show="isLoading===true"></i>
+                    &nbsp;Create Certificate
+                </button>
+            </div>
+        </div>
+
+    </form>
+
 </div>
