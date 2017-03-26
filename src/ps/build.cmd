@@ -1,0 +1,1 @@
+cls && powershell -f image-versionup.ps1 && powershell -f image-build.ps1

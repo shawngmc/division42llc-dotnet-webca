@@ -6,7 +6,7 @@ LABEL Comment="Standard microsoft/aspnetcore:latest image with openssl, and a cu
 
 COPY docker-entrypoint.sh /usr/local/bin
 
-ADD app/bin/Debug/netcoreapp1.1/publish/ /app
+ADD Division42LLC.WebCA.UIWeb/bin/Debug/netcoreapp1.1/publish/ /app
 ADD app-name.txt /app
 ADD app-version.txt /app
 
@@ -37,6 +37,9 @@ RUN echo "[*] Updating Aptitude..." && \
 
 WORKDIR /app
 
+EXPOSE 80
+VOLUME /var/localCA
+
 ENTRYPOINT ["/bin/bash", "/usr/local/bin/docker-entrypoint.sh"]
 
-CMD ["dotnet", "app.dll"]
+CMD ["dotnet", "Division42LLC.WebCA.UIWeb.dll"]
