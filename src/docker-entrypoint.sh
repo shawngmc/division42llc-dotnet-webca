@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 Black='\033[0;30m'
 DarkGray='\033[1;30m'
@@ -20,7 +20,7 @@ NC='\033[0m' # No Color
 
 source /etc/profile 
 
-HELP_URL="https://github.com/Division42LLC/division42-dotnet-webca"
+HELP_URL="https://github.com/Division42LLC/division42llc-dotnet-webca"
 
 echo $IMAGE_NAME | figlet -w 132
 echo ""
@@ -33,5 +33,7 @@ echo ""
 echo "------ Environment ------ \/\/\/\/\/\/\/ "
 env | sort
 echo "------ Environment ------ /\/\/\/\/\/\/\ "
+echo ""
+dotnet --info
 echo ""
 exec "$@"

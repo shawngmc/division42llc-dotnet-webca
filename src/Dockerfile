@@ -1,10 +1,11 @@
-FROM microsoft/aspnetcore
+FROM microsoft/aspnetcore-build
 
-LABEL Comment="Standard microsoft/aspnetcore:latest image with openssl, and a custom CA application hosted on port 80." \
+LABEL Comment="Standard microsoft/aspnetcore:latest image with a custom CA web application hosted on port 80." \
       Author="Division42 LLC" \
       ImageRepo="https://github.com/Division42LLC/division42llc-dotnet-webca"
 
 COPY docker-entrypoint.sh /usr/local/bin
+COPY . /src/
 
 ADD Division42LLC.WebCA.UIWeb/bin/Debug/netcoreapp1.1/publish/ /app
 ADD app-name.txt /app/
@@ -14,8 +15,29 @@ ADD sample-cert.pfx /var/localCA/leaf/
 
 RUN echo "[*] Updating Aptitude..." && \
     apt-get update && \
-    echo "[*] Installing packages: openssl nano figlet" && \
-    apt-get install openssl nano figlet -y && \
+    echo "[*] Installing packages: nano figlet" && \
+    apt-get install nano figlet -y && \
+	cd /src && \
+	echo "[*] Building App: dotnet RESTORE starting..." && \
+	dotnet restore && \
+	echo "[*] Building App: dotnet RESTORE completed." && \
+	echo "[*] Building App: dotnet BUILD starting..." && \
+	cd ./Division42LLC.WebCA.UIWeb && \
+	dotnet build ./Division42LLC.WebCA.UIWeb.csproj  && \
+	echo "[*] Building App: dotnet BUILD completed." && \
+	echo "[*] Building App: dotnet PUBLISH starting..." && \
+	dotnet publish ./Division42LLC.WebCA.UIWeb.csproj -c Release -o /app && \
+	echo "[*] Building App: dotnet PUBLISH completed." && \
+	cd /app && \
+	echo "[*] Configuring app [IMAGE_NAME]..." && \
+	export IMAGE_NAME=`cat /src/app-name.txt` && \
+	echo "export IMAGE_NAME=$IMAGE_NAME" >> /etc/profile && \
+	echo "[*] Configuring app [IMAGE_VERSION]..." && \
+	export IMAGE_VERSION=`cat /src/app-version.txt` && \
+	echo "export IMAGE_VERSION=$IMAGE_VERSION" >> /etc/profile && \
+	echo "export IMAGE_BUILT=\"`date`\"" >> /etc/profile && \
+	echo "[*] Purging source code..." && \
+	rm -rf /src && \
     DISK_SPACE_BEFORE=`df -hm | grep "/$" | xargs | cut -d " " -f3` && \
     echo "[*] Clearing Aptitude cache..." && \
     apt-get clean -y && \
