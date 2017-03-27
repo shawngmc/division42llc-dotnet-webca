@@ -7,7 +7,6 @@ LABEL Comment="Standard microsoft/aspnetcore:latest image with a custom CA web a
 COPY docker-entrypoint.sh /usr/local/bin
 COPY . /src/
 
-ADD Division42LLC.WebCA.UIWeb/bin/Debug/netcoreapp1.1/publish/ /app
 ADD app-name.txt /app/
 ADD app-version.txt /app/
 ADD sample-cert.pfx /var/localCA/CA/
