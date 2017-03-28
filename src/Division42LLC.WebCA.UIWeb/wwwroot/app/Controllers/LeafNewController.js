@@ -11,7 +11,8 @@
             $scope.isLoading = false;
 
             $rootScope.refreshCA();
-            $location.path = "#/leafcerts";
+
+            $location.path("/leafcerts");
         };
 
         var onError = function (response) {

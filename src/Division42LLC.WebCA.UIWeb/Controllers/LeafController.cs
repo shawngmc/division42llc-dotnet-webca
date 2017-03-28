@@ -6,16 +6,17 @@ using Microsoft.AspNetCore.Mvc;
 using Division42LLC.WebCA.CA;
 using Division42LLC.WebCA.Extensions;
 using Division42LLC.WebCA.Models;
+using System.IO;
+using Microsoft.Net.Http.Headers;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Division42LLC.WebCA.UIWeb.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     public class LeafController : Controller
     {
-        [Route("api/leaf/get/{thumbprint}")]
-        [HttpGet]
+        [HttpGet("get/{thumbprint}")]
         public dynamic Get(String thumbprint)
         {
             Console.WriteLine($"GET /api/leaf/get/{thumbprint}");
@@ -37,7 +38,54 @@ namespace Division42LLC.WebCA.UIWeb.Controllers
             }
         }
 
-        [HttpGet]
+
+        [HttpGet("download/{thumbprint}")]
+        public ActionResult Download(String thumbprint)
+        {
+            Console.WriteLine("GET /api/leaf/download/" + thumbprint);
+
+            String pathAndFilename = Path.Combine(CAStorePathInfo.LeafCertPath, $"{thumbprint}.pfx");
+
+            if (System.IO.File.Exists(pathAndFilename))
+            {
+                Response.Headers["Content-Disposition"] =
+                    new ContentDispositionHeaderValue("attachment")
+                    {
+                        FileName = $"{thumbprint}.pfx"
+                    }.ToString();
+
+                return new PhysicalFileResult(
+                    pathAndFilename,
+                    new MediaTypeHeaderValue("application/octet-stream"));
+            }
+            else
+            {
+                return NotFound();
+            }
+
+        }
+
+        [HttpGet("delete/{thumbprint}")]
+        public ActionResult Delete(String thumbprint)
+        {
+            Console.WriteLine("GET /api/leaf/delete/" + thumbprint);
+
+            String pathAndFilename = Path.Combine(CAStorePathInfo.LeafCertPath, $"{thumbprint}.pfx");
+
+            if (System.IO.File.Exists(pathAndFilename))
+            {
+                System.IO.File.Delete(pathAndFilename);
+
+                return NoContent();
+            }
+            else
+            {
+                return NotFound();
+            }
+
+        }
+
+        [HttpGet("")]
         public dynamic GetAll()
         {
             Console.WriteLine("GET /api/leaf/getall");
@@ -53,7 +101,7 @@ namespace Division42LLC.WebCA.UIWeb.Controllers
         }
 
         // POST api/values
-        [HttpPost]
+        [HttpPost("create")]
         public void Create([FromBody]dynamic request)
         {
             Console.WriteLine("POST /api/leaf/create");

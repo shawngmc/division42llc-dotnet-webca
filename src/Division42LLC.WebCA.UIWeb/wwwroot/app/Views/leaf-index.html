@@ -17,8 +17,8 @@
 
 <div ng-if="caCertValid===true">
     <p style="margin-top: -20px">
-        You currently have a Certificate Authority set up. Below are the existing certificates which have 
-        already been issued from this CA. Click to view, download, or delete an existing certificate. Or, 
+        You currently have a Certificate Authority set up. Below are the existing certificates which have
+        already been issued from this CA. Click to view, download, or delete an existing certificate. Or,
         click below to generate a leaf certificate for your servers, from the
         <a href="#/leafcerts/new">New Cert</a> tab.
     </p>
@@ -29,16 +29,46 @@
             <th colspan="2">Expires</th>
         </tr>
         <tr ng-repeat="cert in certs">
-            <td title="{{ cert.distinguishedName }}"><i class="fa fa-certificate"></i>&nbsp;{{ cert.distinguishedNameDetails.commonName}}</td>
-            <td>{{ cert.thumbprint }}<p class="text-sm text-muted">Serial: {{ cert.serialNumber }}</p></td>
+            <td title="{{ cert.distinguishedName }}"><i class="fa fa-certificate"></i>&nbsp;<a href="#/leafcerts/{{ cert.thumbprint }}" title="Click to view the certificate details">{{ cert.distinguishedNameDetails.commonName}}</a></td>
+            <td>
+                {{ cert.thumbprint }}<span class="badge badge-pill badge-primary pull-right badge-text" title="This certificate has a {{cert.keySize}} key."> <i class="fa fa-key" aria-hidden="true"></i>&nbsp;{{cert.keySize}}</span>
+                <p class="text-sm text-muted">Serial: {{ cert.serialNumber }}</p>
+            </td>
             <td>{{ cert.expiresOn | date:mm/dd/yyyy }}</td>
             <td>
-                <button class="btn btn-sm btn-default"><i class="fa fa-download"></i></button>
-                <button class="btn btn-sm btn-primary"><i class="fa fa-pencil"></i></button>
-                <button class="btn btn-sm btn-danger"><i class="fa fa-minus-circle"></i></button>
+                <a href="/api/leaf/download/{{cert.thumbprint}}/" class="btn btn-sm btn-primary"><i class="fa fa-download"></i></a>
+                <button data-toggle="modal" data-target="#deleteModal" ng-click="setCurrentThumbprint(cert.thumbprint)" class="btn btn-sm btn-danger" style="cursor: pointer"><i class="fa fa-trash"></i></button>
             </td>
         </tr>
     </table>
     <hr />
     <a href="#/leafcerts/new" class="btn btn-success pull-right"><i class="fa fa-plus"></i>&nbsp;Add Certificate</a>
+</div>
+
+
+<div class="modal fade" id="deleteModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-gradient-red">
+                <h5 class="modal-title"><i class="fa fa-minus-circle"></i> Permanently Destroy Leaf Certificate</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    This option allows you to completely destroy this certificate. It will no
+                    longer be able to be downloaded.
+                </p>
+                <p>
+                    Do you wish to permanently delete this leaf certificate?
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" ng-click="deleteCertificate()"><i class="fa fa-minus-circle"></i> Permanently Destroy</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 </div>

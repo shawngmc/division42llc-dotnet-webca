@@ -37,7 +37,7 @@
         $scope.wipeCA = function () {
             $scope.isLoading = true;
 
-            $(".modal").hide();
+            setTimeout($(".modal").modal("hide"), 500);
             RestService.get("/api/ca/wipe")
                 .then(onWipeSuccess, onError);
 

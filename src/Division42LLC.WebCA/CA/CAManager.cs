@@ -18,7 +18,8 @@ namespace Division42LLC.WebCA.CA
         {
             if (Directory.Exists(CAStorePathInfo.CARootPath) && File.Exists(CAStorePathInfo.CACertPathAndFileName))
             {
-                X509Certificate2 caCertFromFile = new X509Certificate2(CAStorePathInfo.CACertPathAndFileName, null);
+                X509Certificate2 caCertFromFile = new X509Certificate2(CAStorePathInfo.CACertPathAndFileName, null, X509KeyStorageFlags.Exportable);
+
                 //RSA caPrivateKeyFromFile = caCertFromFile.GetRSAPrivateKey();
 
                 return caCertFromFile;
@@ -83,12 +84,12 @@ namespace Division42LLC.WebCA.CA
 
             CertificateGenerator generator = new CertificateGenerator();
 
-            String subjectDN = $"CN={name},O={organization},OU={organizationalUnit},L={city},C={countryCode},ST={stateCode}";
+            String subjectDN = $"CN={name},O={organization},OU={organizationalUnit},L={city},C={countryCode}"; //,ST={stateCode}";
             String[] subjectAlternativeNames = new List<String>().ToArray();
 
             KeyPurposeID[] usages = new List<KeyPurposeID>() { KeyPurposeID.AnyExtendedKeyUsage }.ToArray();
 
-            X509Certificate2 issuerCertificate = GetCACertificate();
+            X509Certificate2 issuerCertificate = GetCACertificate("test");
             AsymmetricAlgorithm issuerPrivateKey = issuerCertificate.GetRSAPrivateKey();
 
             X509Certificate2 certForCA = generator.IssueCertificate(subjectDN, issuerCertificate, issuerPrivateKey, subjectAlternativeNames, usages);
@@ -96,6 +97,9 @@ namespace Division42LLC.WebCA.CA
 
             try
             {
+                if (!Directory.Exists(CAStorePathInfo.LeafCertPath))
+                    Directory.CreateDirectory(CAStorePathInfo.LeafCertPath);
+
                 String leafPathAndFilename = Path.Combine(CAStorePathInfo.LeafCertPath, $"{certForCA.Thumbprint}.pfx");
 
                 File.WriteAllBytes(leafPathAndFilename, certForCA.Export(X509ContentType.Pfx, password));
@@ -125,7 +129,8 @@ namespace Division42LLC.WebCA.CA
                         SerialNumber = certificate.SerialNumber,
                         Thumbprint = certificate.Thumbprint,
                         PublicKey = certificate.ExportToPEM(),
-                        DistinguishedNameDetails = certificate.ExtractDNFields()
+                        DistinguishedNameDetails = certificate.ExtractDNFields(),
+                        KeySize = $"{certificate.GetRSAPublicKey().KeySize}-bit"
                     };
                 }
             }
@@ -155,7 +160,7 @@ namespace Division42LLC.WebCA.CA
             //C countryName
             //UID userid
 
-            String subjectDN = $"CN={name},O={organization},OU={organizationalUnit},L={city},C={countryCode},ST={stateCode}";
+            String subjectDN = $"CN={name},O={organization},OU={organizationalUnit},L={city},C={countryCode}"; //,ST={stateCode}";
             String[] subjectAlternativeNames =
                 new List<String>().ToArray();
 

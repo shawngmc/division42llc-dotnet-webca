@@ -8,6 +8,10 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography.X509Certificates;
 using Division42LLC.WebCA.CA;
 using Division42LLC.WebCA.Extensions;
+using Microsoft.Net.Http.Headers;
+using System.Net;
+using System.Net.Http;
+using System.Threading;
 
 namespace app.Controllers
 {
@@ -25,11 +29,37 @@ namespace app.Controllers
                 Directory.Delete(CAStorePathInfo.CARootPath, true);
                 return new { status = "OK" };
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
-                return new { status = "FAIL", message=exception.Message };
+                return new { status = "FAIL", message = exception.Message };
             }
-            
+
+        }
+
+        [HttpGet]
+        public ActionResult Download()
+        {
+            Console.WriteLine("GET /api/ca/download");
+
+            if (System.IO.File.Exists(CAStorePathInfo.CACertPathAndFileName))
+            {
+                //Response.Headers.Add("Content-Disposition", "attachment; webCA-cert.pfx");
+
+                Response.Headers["Content-Disposition"] =
+                    new ContentDispositionHeaderValue("attachment")
+                    {
+                        FileName = "webCA-cert.pfx"
+                    }.ToString();
+
+                return new PhysicalFileResult(
+                    CAStorePathInfo.CACertPathAndFileName,
+                    new MediaTypeHeaderValue("application/octet-stream"));
+            }
+            else
+            {
+                return NotFound();
+            }
+
         }
 
         [HttpGet]
@@ -75,4 +105,5 @@ namespace app.Controllers
         }
 
     }
+
 }

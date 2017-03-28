@@ -85,3 +85,7 @@ form.bordered {
     background: -moz-linear-gradient(#0baaa2, #17b9b6);
     background: linear-gradient(#0baaa2, #17b9b6);
 }
+
+.badge-text{
+    font-size: .6em !important;
+}

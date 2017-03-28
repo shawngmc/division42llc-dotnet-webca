@@ -14,5 +14,6 @@ namespace Division42LLC.WebCA.Models
         public String PublicKey { get; set; }
 
         public DistinguishedNameDetails DistinguishedNameDetails { get; set; }
+        public string KeySize { get; internal set; }
     }
 }
