@@ -17,6 +17,7 @@ using X509KeyStorageFlags = System.Security.Cryptography.X509Certificates.X509Ke
 using X509ContentType = System.Security.Cryptography.X509Certificates.X509ContentType;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
+using Division42LLC.WebCA.Models;
 
 namespace Division42LLC.WebCA.x509
 {
@@ -24,15 +25,15 @@ namespace Division42LLC.WebCA.x509
     public class CertificateGenerator
     {
 
-        public X509Certificate2 LoadCertificate(string issuerFileName, string password)
+        public CertificateAndPems LoadCertificate(String issuerFileName, String password)
         {
             // We need to pass 'Exportable', otherwise we can't get the private key.
             var issuerCertificate = new X509Certificate2(issuerFileName, password, X509KeyStorageFlags.Exportable);
 
-            return issuerCertificate;
+            return new CertificateAndPems(issuerCertificate);
         }
 
-        public X509Certificate2 IssueCertificate(string subjectName, X509Certificate2 issuerCertificate, AsymmetricAlgorithm issuerPrivateKey, 
+        public CertificateAndPems IssueCertificate(string subjectName, X509Certificate2 issuerCertificate, AsymmetricAlgorithm issuerPrivateKey, 
             string[] subjectAlternativeNames, KeyPurposeID[] usages)
         {
             // It's self-signed, so these are the same.
@@ -51,10 +52,10 @@ namespace Division42LLC.WebCA.x509
                                                   subjectAlternativeNames, issuerName, issuerKeyPair,
                                                   issuerSerialNumber, isCertificateAuthority,
                                                   usages);
-            return ConvertCertificate(certificate, subjectKeyPair, random);
+            return new CertificateAndPems(ConvertCertificate(certificate, subjectKeyPair, random));
         }
 
-        public X509Certificate2 CreateCertificateAuthorityCertificate(string subjectName, string[] subjectAlternativeNames, KeyPurposeID[] usages)
+        public CertificateAndPems CreateCertificateAuthorityCertificate(string subjectName, string[] subjectAlternativeNames, KeyPurposeID[] usages)
         {
             // It's self-signed, so these are the same.
             var issuerName = subjectName;
@@ -73,7 +74,7 @@ namespace Division42LLC.WebCA.x509
                                                   subjectAlternativeNames, issuerName, issuerKeyPair,
                                                   issuerSerialNumber, isCertificateAuthority,
                                                   usages);
-            return ConvertCertificate(certificate, subjectKeyPair, random);
+            return new CertificateAndPems(ConvertCertificate(certificate, subjectKeyPair, random));
         }
 
         internal X509Certificate2 IssueCertificate(string subjectDN, object issuerCertificate, object issuerPrivateKey, string[] subjectAlternativeNames, KeyPurposeID[] usages)
@@ -81,7 +82,7 @@ namespace Division42LLC.WebCA.x509
             throw new NotImplementedException();
         }
 
-        public X509Certificate2 CreateSelfSignedCertificate(string subjectName, string[] subjectAlternativeNames, KeyPurposeID[] usages)
+        public CertificateAndPems CreateSelfSignedCertificate(string subjectName, string[] subjectAlternativeNames, KeyPurposeID[] usages)
         {
             // It's self-signed, so these are the same.
             var issuerName = subjectName;
@@ -100,7 +101,7 @@ namespace Division42LLC.WebCA.x509
                                                   subjectAlternativeNames, issuerName, issuerKeyPair,
                                                   issuerSerialNumber, isCertificateAuthority,
                                                   usages);
-            return ConvertCertificate(certificate, subjectKeyPair, random);
+            return new CertificateAndPems(ConvertCertificate(certificate, subjectKeyPair, random));
         }
 
         public SecureRandom GetSecureRandom()

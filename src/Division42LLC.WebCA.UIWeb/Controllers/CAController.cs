@@ -12,13 +12,15 @@ using Microsoft.Net.Http.Headers;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
+using Division42LLC.WebCA.Models;
+using System.Text;
 
 namespace app.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     public class CAController : Controller
     {
-        [HttpGet]
+        [HttpGet("wipe")]
         public dynamic Wipe()
         {
             Console.WriteLine("GET /api/ca/wipe");
@@ -36,7 +38,7 @@ namespace app.Controllers
 
         }
 
-        [HttpGet]
+        [HttpGet("download/")]
         public ActionResult Download()
         {
             Console.WriteLine("GET /api/ca/download");
@@ -62,7 +64,59 @@ namespace app.Controllers
 
         }
 
-        [HttpGet]
+        [HttpGet("download/public/")]
+        public ActionResult DownloadPublic()
+        {
+            Console.WriteLine("GET /api/ca/download/public");
+
+            String pathAndFilename = CAStorePathInfo.CACertPathAndFileName;
+
+                        if (System.IO.File.Exists(pathAndFilename))
+            {
+                Response.Headers["Content-Disposition"] =
+                    new ContentDispositionHeaderValue("attachment")
+                    { FileName = $"ca.cer" }.ToString();
+
+                CertificateAndPems result = new CertificateAndPems(new X509Certificate2(pathAndFilename, null, X509KeyStorageFlags.Exportable));
+
+                Byte[] fileContents = Encoding.UTF8.GetBytes(result.PublicKeyPem);
+
+                return new FileContentResult(fileContents, new MediaTypeHeaderValue("application/octet-stream"));
+            }
+            else
+            {
+                return NotFound();
+            }
+
+        }
+
+        [HttpGet("download/private/")]
+        public ActionResult DownloadPrivate()
+        {
+            Console.WriteLine("GET /api/ca/download/private");
+
+            String pathAndFilename = CAStorePathInfo.CACertPathAndFileName;
+
+            if (System.IO.File.Exists(pathAndFilename))
+            {
+                Response.Headers["Content-Disposition"] =
+                    new ContentDispositionHeaderValue("attachment")
+                    { FileName = $"ca.key" }.ToString();
+
+                CertificateAndPems result = new CertificateAndPems(new X509Certificate2(pathAndFilename, null, X509KeyStorageFlags.Exportable));
+
+                Byte[] fileContents = Encoding.UTF8.GetBytes(result.PrivateKeyPem);
+
+                return new FileContentResult(fileContents, new MediaTypeHeaderValue("application/octet-stream"));
+            }
+            else
+            {
+                return NotFound();
+            }
+
+        }
+
+        [HttpGet("get")]
         public dynamic Get()
         {
             Console.WriteLine("GET /api/ca/get");
@@ -73,19 +127,18 @@ namespace app.Controllers
                 return new { status = "Certificate not present." };
             else
             {
-                String publicKey = cert.ExportToPEM();
                 return new
                 {
                     status = "OK",
                     x509certificate = cert,
-                    subjectDN = cert.ExtractDNFields(),
-                    publicKey = publicKey
+                    subjectDN = cert.Certificate.ExtractDNFields(),
+                    keySize = $"{cert.Certificate.GetRSAPublicKey().KeySize}-bit"
                 };
             }
         }
 
         // POST api/values
-        [HttpPost]
+        [HttpPost("create")]
         public void Create([FromBody]dynamic request)
         {
             Console.WriteLine("POST /api/ca/create");

@@ -9,12 +9,13 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using Division42LLC.WebCA.Models;
 using Division42LLC.WebCA.Extensions;
+using Org.BouncyCastle.OpenSsl;
 
 namespace Division42LLC.WebCA.CA
 {
     public class CAManager
     {
-        public X509Certificate2 GetCACertificate(String password = null)
+        public CertificateAndPems GetCACertificate(String password = null)
         {
             if (Directory.Exists(CAStorePathInfo.CARootPath) && File.Exists(CAStorePathInfo.CACertPathAndFileName))
             {
@@ -22,7 +23,7 @@ namespace Division42LLC.WebCA.CA
 
                 //RSA caPrivateKeyFromFile = caCertFromFile.GetRSAPrivateKey();
 
-                return caCertFromFile;
+                return new CertificateAndPems(caCertFromFile);
             }
             else
             {
@@ -30,14 +31,14 @@ namespace Division42LLC.WebCA.CA
             }
         }
 
-        public X509Certificate2 GetLeafCertificate(String thumbprint, String password = null)
+        public CertificateAndPems GetLeafCertificate(String thumbprint, String password = null)
         {
             String leafPathAndFilename = Path.Combine(CAStorePathInfo.LeafCertPath, $"{thumbprint}.pfx");
             if (Directory.Exists(CAStorePathInfo.LeafCertPath) && File.Exists(leafPathAndFilename))
             {
-                X509Certificate2 certificate = new X509Certificate2(leafPathAndFilename, password);
+                X509Certificate2 certificate = new X509Certificate2(leafPathAndFilename, password, X509KeyStorageFlags.Exportable);
 
-                return certificate;
+                return new CertificateAndPems(certificate);
             }
             else
             {
@@ -89,10 +90,10 @@ namespace Division42LLC.WebCA.CA
 
             KeyPurposeID[] usages = new List<KeyPurposeID>() { KeyPurposeID.AnyExtendedKeyUsage }.ToArray();
 
-            X509Certificate2 issuerCertificate = GetCACertificate("test");
+            X509Certificate2 issuerCertificate = GetCACertificate("test").Certificate;
             AsymmetricAlgorithm issuerPrivateKey = issuerCertificate.GetRSAPrivateKey();
 
-            X509Certificate2 certForCA = generator.IssueCertificate(subjectDN, issuerCertificate, issuerPrivateKey, subjectAlternativeNames, usages);
+            X509Certificate2 certForCA = generator.IssueCertificate(subjectDN, issuerCertificate, issuerPrivateKey, subjectAlternativeNames, usages).Certificate;
 
 
             try
@@ -167,7 +168,7 @@ namespace Division42LLC.WebCA.CA
             KeyPurposeID[] usages =
                 new List<KeyPurposeID>() { KeyPurposeID.AnyExtendedKeyUsage }.ToArray();
 
-            X509Certificate2 certForCA = generator.CreateCertificateAuthorityCertificate(subjectDN, subjectAlternativeNames, usages);
+            X509Certificate2 certForCA = generator.CreateCertificateAuthorityCertificate(subjectDN, subjectAlternativeNames, usages).Certificate;
 
             //try
             //{
@@ -235,6 +236,14 @@ namespace Division42LLC.WebCA.CA
             {
                 throw new CAConfigurationException($"An exception of type \"{exception.GetType().ToString()}\" occurred while attempting to determine the root folder for the Certificate Authority. The environment variable \"CA_ROOT\" should point to the folder which represents where the CA files are stored.", exception);
             }
+        }
+
+        private void test()
+        {
+            //PemWriter
+
+
+
         }
     }
 }

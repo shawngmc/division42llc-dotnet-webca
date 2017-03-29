@@ -1,0 +1,124 @@
+<section class="page-header">
+    <h3><i class="fa fa-certificate" aria-hidden="true"></i>&nbsp;Certificate Detail</h3>
+    <small>
+        Use the area below to view your leaf certificate.
+    </small>
+</section>
+<br>
+
+
+<fieldset style="margin-top: -30px">
+    <legend><small class="text-muted">details for this leaf certificate</small></legend>
+
+    <table class="table table-bordered table-hover table-condensed table-striped table-sm">
+        <tr>
+            <th class="lead"><strong>Common Name</strong></th>
+            <td class="lead"><strong>{{ cert.subjectDN.commonName }}</strong></td>
+        </tr>
+        <tr></tr>
+        <tr></tr>
+        <tr>
+            <th>Distinguished Name</th>
+            <td>{{ cert.x509certificate.certificate.subject }}</td>
+        </tr>
+        <tr>
+            <th scope="row">Valid From</th>
+            <td>{{ cert.x509certificate.certificate.notBefore }}</td>
+        </tr>
+        <tr>
+            <th scope="row">Valid To</th>
+            <td>{{ cert.x509certificate.certificate.notAfter }}</td>
+        </tr>
+
+        <tr>
+            <th scope="row">Version</th>
+            <td>{{ cert.x509certificate.certificate.version }}</td>
+        </tr>
+        <tr>
+            <th scope="row">Serial Number</th>
+            <td>{{ cert.x509certificate.certificate.serialNumber }}</td>
+        </tr>
+        <tr>
+            <th scope="row">Signature Algorithm</th>
+            <td><span class="badge badge-success" title="{{ cert.x509certificate.certificate.signatureAlgorithm.friendlyName }} ({{ cert.x509certificate.certificate.signatureAlgorithm.value }})"> <i class="fa fa-lock" aria-hidden="true"></i>&nbsp;{{ cert.x509certificate.certificate.signatureAlgorithm.friendlyName }}</span></td>
+        </tr>
+        <tr>
+            <th scope="row">Public Key Algorithm</th>
+            <td><span class="badge badge-success" title="{{ cert.x509certificate.certificate.publicKey.oid.friendlyName }} ({{ cert.x509certificate.certificate.publicKey.oid.value }})"><i class="fa fa-lock" aria-hidden="true"></i>&nbsp;{{ cert.x509certificate.certificate.publicKey.oid.friendlyName }}</span></td>
+        </tr>
+        <tr>
+            <th scope="row">Key Size</th>
+            <td><span class="badge badge-pill badge-primary" title="This certificate uses a {{ cert.keySize }} key."> <i class="fa fa-key" aria-hidden="true"></i>&nbsp;{{ cert.keySize }}</span></td>
+        </tr>
+        <tr>
+            <th scope="row">Thumbprint</th>
+            <td>{{ cert.x509certificate.certificate.thumbprint }}</td>
+        </tr>
+        <tr>
+            <th scope="row">Public Key</th>
+            <td><pre>{{ cert.x509certificate.publicKeyPem }}</pre></td>
+        </tr>
+        <tr>
+            <th scope="row">Private Key</th>
+            <td><pre>{{ cert.x509certificate.privateKeyPem }}</pre></td>
+        </tr>
+    </table>
+
+    <table class="table table-bordered table-sm" style="width:80%; margin-left:20px;margin-right:50px; background-color: #ddddee; font-size: .8em;">
+        <tr>
+            <th>issuer</th>
+            <td>{{ cert.x509certificate.certificate.issuerName.name }}</td>
+        </tr>
+        <tr>
+            <th>authority key identifier</th>
+            <td>{{ cert.x509certificate.certificate.thumbprint }}</td>
+        </tr>
+    </table>
+</fieldset>
+
+
+<script>
+    $().ready(function () {
+        $('li.nav-item a[role=tab]').click(function (e) {
+            e.preventDefault()
+            $(this).tab('show')
+        })
+    });
+</script>
+
+<hr>
+<div>
+    <a href="/api/ca/download/public/" class="btn btn-sm btn-primary" title="Download the CA public key in Base64 (.cer) format."><i class="fa fa-download"></i>&nbsp;CA</a>
+    <a href="/api/leaf/download/public/{{cert.x509certificate.certificate.thumbprint}}/" class="btn btn-sm btn-primary" title="Download the leaf public key in Base64 (.cer) format."><i class="fa fa-download"></i>&nbsp;Public</a>
+    <a href="/api/leaf/download/private/{{cert.x509certificate.certificate.thumbprint}}/" class="btn btn-sm btn-primary" title="Download the leaf private key in Base64 (.key) format."><i class="fa fa-download"></i>&nbsp;Private</a>
+
+    <button class="btn btn-danger btn-sm pull-right" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-minus-circle"></i>&nbsp;Delete</button>
+
+</div>
+
+
+<div class="modal fade" id="deleteModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-gradient-red">
+                <h5 class="modal-title"><i class="fa fa-minus-circle"></i> Permanently Destroy Leaf Certificate</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    This option allows you to completely destroy this certificate. It will no
+                    longer be able to be downloaded.
+                </p>
+                <p>
+                    Do you wish to permanently delete this leaf certificate?
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" ng-click="deleteCertificate()"><i class="fa fa-minus-circle"></i> Permanently Destroy</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

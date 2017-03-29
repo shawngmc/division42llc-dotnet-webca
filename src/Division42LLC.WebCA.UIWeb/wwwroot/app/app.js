@@ -16,7 +16,11 @@
                 templateUrl: "/app/Views/leaf-index.html",
                 controller: "LeafCertsController"
             })
-            .when("/leafcerts/new", {
+            .when("/leafcerts/:id/details/", {
+                templateUrl: "/app/Views/leaf-detail.html",
+                controller: "LeafCertDetailController"
+            })
+            .when("/leafcerts/new/", {
                 templateUrl: "/app/Views/leaf-new.html",
                 controller: "LeafNewController"
             })
@@ -27,9 +31,9 @@
 
         RestService.getApplicationDetails()
             .then(function(data) {
-                $rootScope.app_name = data.app_name;
-                $rootScope.app_version = data.app_version;
-                $rootScope.app_built = data.app_built;
+                $rootScope.app_name = data.applicationName;
+                $rootScope.app_version = data.applicationVersion;
+                $rootScope.app_built = data.applicationBuilt;
                 $rootScope.hostname = data.hostname;
                 $rootScope.uptime = data.uptime;
             });

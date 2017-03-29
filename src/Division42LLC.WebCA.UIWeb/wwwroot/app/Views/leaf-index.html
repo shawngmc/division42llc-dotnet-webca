@@ -28,15 +28,22 @@
             <th>Thumbprint</th>
             <th colspan="2">Expires</th>
         </tr>
+        <tr ng-show="!certs">
+            <td colspan="4" class="center-block text-center">
+                <em>--No Certificates Found--</em>
+            </td>
+        </tr>
         <tr ng-repeat="cert in certs">
-            <td title="{{ cert.distinguishedName }}"><i class="fa fa-certificate"></i>&nbsp;<a href="#/leafcerts/{{ cert.thumbprint }}" title="Click to view the certificate details">{{ cert.distinguishedNameDetails.commonName}}</a></td>
+            <td title="{{ cert.distinguishedName }}"><i class="fa fa-certificate"></i>&nbsp;<a href="#/leafcerts/{{ cert.thumbprint }}/details" title="Click to view the certificate details">{{ cert.distinguishedNameDetails.commonName}}</a></td>
             <td>
                 {{ cert.thumbprint }}<span class="badge badge-pill badge-primary pull-right badge-text" title="This certificate has a {{cert.keySize}} key."> <i class="fa fa-key" aria-hidden="true"></i>&nbsp;{{cert.keySize}}</span>
                 <p class="text-sm text-muted">Serial: {{ cert.serialNumber }}</p>
             </td>
             <td>{{ cert.expiresOn | date:mm/dd/yyyy }}</td>
             <td>
-                <a href="/api/leaf/download/{{cert.thumbprint}}/" class="btn btn-sm btn-primary"><i class="fa fa-download"></i></a>
+                <a href="/api/ca/download/public/" class="btn btn-sm btn-primary" title="Download the CA public key in Base64 (.cer) format."><i class="fa fa-download"></i>&nbsp;CA</a>
+                <a href="/api/leaf/download/public/{{cert.thumbprint}}/" class="btn btn-sm btn-primary" title="Download the leaf public key in Base64 (.cer) format."><i class="fa fa-download"></i>&nbsp;Pub</a>
+                <a href="/api/leaf/download/private/{{cert.thumbprint}}/" class="btn btn-sm btn-primary" title="Download the leaf private key in Base64 (.key) format."><i class="fa fa-download"></i>&nbsp;Priv</a>
                 <button data-toggle="modal" data-target="#deleteModal" ng-click="setCurrentThumbprint(cert.thumbprint)" class="btn btn-sm btn-danger" style="cursor: pointer"><i class="fa fa-trash"></i></button>
             </td>
         </tr>
@@ -70,5 +77,4 @@
             </div>
         </div>
     </div>
-</div>
 </div>

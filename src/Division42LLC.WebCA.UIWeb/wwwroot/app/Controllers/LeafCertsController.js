@@ -26,11 +26,11 @@
 
         $scope.deleteCertificate = function () {
 
-            setTimeout($(".modal").modal("hide"), 500);
-
-            RestService.get("/api/leaf/delete/" + $scope.currentThumbprint)
-                .then(function () { $scope.getLeafCerts() }, onError);
-
+            $(".modal").modal("hide");
+            setTimeout(function () {
+                RestService.get("/api/leaf/delete/" + $scope.currentThumbprint)
+                    .then(function () { $scope.getLeafCerts() }, onError);
+            }, 500);
         };
 
         $scope.getLeafCerts = function () {

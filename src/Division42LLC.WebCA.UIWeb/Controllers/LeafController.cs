@@ -8,6 +8,8 @@ using Division42LLC.WebCA.Extensions;
 using Division42LLC.WebCA.Models;
 using System.IO;
 using Microsoft.Net.Http.Headers;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -27,13 +29,12 @@ namespace Division42LLC.WebCA.UIWeb.Controllers
                 return new { status = "Certificate not present." };
             else
             {
-                String publicKey = cert.ExportToPEM();
                 return new
                 {
                     status = "OK",
                     x509certificate = cert,
-                    subjectDN = cert.ExtractDNFields(),
-                    publicKey = publicKey
+                    subjectDN = cert.Certificate.ExtractDNFields(),
+                    keySize = $"{cert.Certificate.GetRSAPublicKey().KeySize}-bit"
                 };
             }
         }
@@ -57,6 +58,58 @@ namespace Division42LLC.WebCA.UIWeb.Controllers
                 return new PhysicalFileResult(
                     pathAndFilename,
                     new MediaTypeHeaderValue("application/octet-stream"));
+            }
+            else
+            {
+                return NotFound();
+            }
+
+        }
+
+        [HttpGet("download/public/{thumbprint}/")]
+        public ActionResult DownloadPublic(String thumbprint)
+        {
+            Console.WriteLine("GET /api/leaf/download/" + thumbprint + "/public");
+
+            String pathAndFilename = Path.Combine(CAStorePathInfo.LeafCertPath, $"{thumbprint}.pfx");
+
+            if (System.IO.File.Exists(pathAndFilename))
+            {
+                Response.Headers["Content-Disposition"] =
+                    new ContentDispositionHeaderValue("attachment")
+                    { FileName = $"{thumbprint}.cer" }.ToString();
+
+                CertificateAndPems result = new CertificateAndPems(new X509Certificate2(pathAndFilename, null, X509KeyStorageFlags.Exportable));
+
+                Byte[] fileContents = Encoding.UTF8.GetBytes(result.PublicKeyPem);
+
+                return new FileContentResult(fileContents, new MediaTypeHeaderValue("application/octet-stream"));
+            }
+            else
+            {
+                return NotFound();
+            }
+
+        }
+
+        [HttpGet("download/private/{thumbprint}/")]
+        public ActionResult DownloadPrivate(String thumbprint)
+        {
+            Console.WriteLine("GET /api/leaf/download/" + thumbprint + "/private");
+
+            String pathAndFilename = Path.Combine(CAStorePathInfo.LeafCertPath, $"{thumbprint}.pfx");
+
+            if (System.IO.File.Exists(pathAndFilename))
+            {
+                Response.Headers["Content-Disposition"] =
+                    new ContentDispositionHeaderValue("attachment")
+                    { FileName = $"{thumbprint}.key" }.ToString();
+
+                CertificateAndPems result = new CertificateAndPems(new X509Certificate2(pathAndFilename, null, X509KeyStorageFlags.Exportable));
+
+                Byte[] fileContents = Encoding.UTF8.GetBytes(result.PrivateKeyPem);
+
+                return new FileContentResult(fileContents, new MediaTypeHeaderValue("application/octet-stream"));
             }
             else
             {
@@ -93,7 +146,7 @@ namespace Division42LLC.WebCA.UIWeb.Controllers
 
             IEnumerable<CertificateEntry> certs = caManager.GetAllLeafCertificates();
             if (certs == null || certs.Count() == 0)
-                return new { status = "Certificates not present." };
+                return null;
             else
             {
                 return certs;

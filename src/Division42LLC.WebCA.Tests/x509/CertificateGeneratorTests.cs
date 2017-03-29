@@ -47,7 +47,7 @@ namespace Division42LLC.WebCA.Tests.x509
             {
                 // CA
                 {
-                    X509Certificate2 certForCA = instance.CreateCertificateAuthorityCertificate(subjectDN, subjectAlternativeNames, usages);
+                    X509Certificate2 certForCA = instance.CreateCertificateAuthorityCertificate(subjectDN, subjectAlternativeNames, usages).Certificate;
                     
                     File.WriteAllBytes(@"C:\Data\cert-CA.sst", certForCA.Export(X509ContentType.SerializedCert, "test"));
                 }
@@ -66,7 +66,7 @@ namespace Division42LLC.WebCA.Tests.x509
             {
                 // LEAF1
                 String dnForLeaf1 = $"CN=leaf1,O={organization},OU={organizationalUnit},L={city},C={countryCode}";
-                X509Certificate2 certForLeaf1 = instance.IssueCertificate(dnForLeaf1, caCertFromFile, caPrivateKeyFromFile, subjectAlternativeNames, usages);
+                X509Certificate2 certForLeaf1 = instance.IssueCertificate(dnForLeaf1, caCertFromFile, caPrivateKeyFromFile, subjectAlternativeNames, usages).Certificate;
                 File.WriteAllBytes(@"C:\Data\cert-leaf1.pfx", certForLeaf1.Export(X509ContentType.Pkcs12, "test"));
             });
 
@@ -74,7 +74,7 @@ namespace Division42LLC.WebCA.Tests.x509
             {
                 // LEAF2
                 String dnForLeaf2 = $"CN=leaf2,O={organization},OU={organizationalUnit},L={city},C={countryCode}";
-                X509Certificate2 certForLeaf2 = instance.IssueCertificate(dnForLeaf2, caCertFromFile, caPrivateKeyFromFile, subjectAlternativeNames, usages);
+                X509Certificate2 certForLeaf2 = instance.IssueCertificate(dnForLeaf2, caCertFromFile, caPrivateKeyFromFile, subjectAlternativeNames, usages).Certificate;
                 File.WriteAllBytes(@"C:\Data\cert-leaf2.pfx", certForLeaf2.Export(X509ContentType.Pkcs12, "test"));
             });
 
@@ -82,7 +82,7 @@ namespace Division42LLC.WebCA.Tests.x509
             {
                 // LEAF2
                 String dnForLeaf3 = $"CN=leaf3,O={organization},OU={organizationalUnit},L={city},C={countryCode}";
-                X509Certificate2 certForLeaf3 = instance.IssueCertificate(dnForLeaf3, caCertFromFile, caPrivateKeyFromFile, subjectAlternativeNames, usages);
+                X509Certificate2 certForLeaf3 = instance.IssueCertificate(dnForLeaf3, caCertFromFile, caPrivateKeyFromFile, subjectAlternativeNames, usages).Certificate;
                 File.WriteAllBytes(@"C:\Data\cert-leaf3.pfx", certForLeaf3.Export(X509ContentType.Pkcs12, "test"));
             });
 
