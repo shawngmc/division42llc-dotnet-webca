@@ -67,11 +67,20 @@ and it will list certificates in the leaf folder. However, you can't create a le
 without getting an error.
 
 ### Screenshots
-Below are some screenshots of the application.
+Below are some screenshots of the application. First, working with the CA, itself:
 
-![Home - without a CA set up](docs/screenshots/home-without-CA.png?raw=true "Home - without a CA set up")
-![CA - create new CA certificate](docs/screenshots/CA-setup.png?raw=true "CA - create new CA certificate")
-![CA - view CA certificate](docs/screenshots/CA-view.png?raw=true "CA - view CA certificate")
-![Home - with a CA set up](docs/screenshots/home-with-CA.png?raw=true "Home - with a CA set up")
-![Leaf - create a new leaf certificate](docs/screenshots/leaf-create.png?raw=true "Leaf - create a new leaf certificate")
+![Home - without a CA](docs/screenshots/home-without-CA.png?raw=true "Home - without a CA")
+![CA - setup](docs/screenshots/CA-setup.png?raw=true "CA - setup")
+![CA - View 1](docs/screenshots/CA-view1.png?raw=true "CA - View 1")
+![CA - View 2](docs/screenshots/CA-view2.png?raw=true "CA - View 2")
+![Home - with a CA](docs/screenshots/home-with-CA.png?raw=true "Home - with a CA")
+![CA - delete](docs/screenshots/CA-delete.png?raw=true "CA - delete")
+
+Then, working with leaf certificates, signed by the CA:
+
+![Leaf - create leaf certificates](docs/screenshots/leaf-create.png?raw=true "Leaf - create leaf certificates")
 ![Leaf - list of leaf certificates](docs/screenshots/leaf-list.png?raw=true "Leaf - list of leaf certificates")
+![Leaf - view 1 leaf certificates](docs/screenshots/leaf-view1.png?raw=true "Leaf - view 1 leaf certificates")
+![Leaf - view 2 leaf certificates](docs/screenshots/leaf-view2.png?raw=true "Leaf - view 2 leaf certificates")
+![Leaf - delete leaf certificates](docs/screenshots/leaf-delete.png?raw=true "Leaf - delete leaf certificates")
+
