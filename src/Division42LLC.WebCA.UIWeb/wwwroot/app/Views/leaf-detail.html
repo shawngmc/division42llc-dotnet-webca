@@ -88,9 +88,9 @@
 
 <hr>
 <div>
-    <a href="/api/ca/download/public/" class="btn btn-sm btn-primary" title="Download the CA public key in Base64 (.cer) format."><i class="fa fa-download"></i>&nbsp;CA</a>
-    <a href="/api/leaf/download/public/{{cert.x509certificate.certificate.thumbprint}}/" class="btn btn-sm btn-primary" title="Download the leaf public key in Base64 (.cer) format."><i class="fa fa-download"></i>&nbsp;Public</a>
-    <a href="/api/leaf/download/private/{{cert.x509certificate.certificate.thumbprint}}/" class="btn btn-sm btn-primary" title="Download the leaf private key in Base64 (.key) format."><i class="fa fa-download"></i>&nbsp;Private</a>
+    <a href="/api/leaf/download/{{cert.x509certificate.certificate.thumbprint}}/" class="btn btn-sm btn-primary" title="Download the leaf certificate in Base64 (.crt) format."><i class="fa fa-download"></i>&nbsp;Cert</a>
+    <a href="/api/leaf/download/private/{{cert.x509certificate.certificate.thumbprint}}/" class="btn btn-sm btn-primary" title="Download the leaf private key in Base64 (.key) format."><i class="fa fa-download"></i>&nbsp;Key</a>
+    <a href="/api/ca/download/" class="btn btn-sm btn-primary" title="Download the CA certificate in Base64 (.crt) format."><i class="fa fa-download"></i>&nbsp;CA</a>
 
     <button class="btn btn-danger btn-sm pull-right" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-minus-circle"></i>&nbsp;Delete</button>
 

@@ -41,21 +41,21 @@ namespace app.Controllers
         [HttpGet("download/")]
         public ActionResult Download()
         {
-            Console.WriteLine("GET /api/ca/download");
+            Console.WriteLine("GET /api/ca/download/");
 
-            if (System.IO.File.Exists(CAStorePathInfo.CACertPathAndFileName))
+            String pathAndFilename = CAStorePathInfo.CACertPathAndFileName;
+
+            if (System.IO.File.Exists(pathAndFilename))
             {
-                //Response.Headers.Add("Content-Disposition", "attachment; webCA-cert.pfx");
-
                 Response.Headers["Content-Disposition"] =
                     new ContentDispositionHeaderValue("attachment")
-                    {
-                        FileName = "webCA-cert.pfx"
-                    }.ToString();
+                    { FileName = $"ca.crt" }.ToString();
 
-                return new PhysicalFileResult(
-                    CAStorePathInfo.CACertPathAndFileName,
-                    new MediaTypeHeaderValue("application/octet-stream"));
+                X509Certificate2 result = new X509Certificate2(pathAndFilename, null, X509KeyStorageFlags.Exportable);
+
+                Byte[] fileContents = Encoding.UTF8.GetBytes(result.ExportToPEM());
+
+                return new FileContentResult(fileContents, new MediaTypeHeaderValue("application/octet-stream"));
             }
             else
             {
@@ -75,7 +75,7 @@ namespace app.Controllers
             {
                 Response.Headers["Content-Disposition"] =
                     new ContentDispositionHeaderValue("attachment")
-                    { FileName = $"ca.cer" }.ToString();
+                    { FileName = $"ca.pub" }.ToString();
 
                 CertificateAndPems result = new CertificateAndPems(new X509Certificate2(pathAndFilename, null, X509KeyStorageFlags.Exportable));
 
@@ -132,7 +132,8 @@ namespace app.Controllers
                     status = "OK",
                     x509certificate = cert,
                     subjectDN = cert.Certificate.ExtractDNFields(),
-                    keySize = $"{cert.Certificate.GetRSAPublicKey().KeySize}-bit"
+                    keySize = $"{cert.Certificate.GetRSAPublicKey().KeySize}-bit",
+                    certificatePem = cert.Certificate.ExportToPEM()
                 };
             }
         }

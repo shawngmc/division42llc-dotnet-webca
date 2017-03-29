@@ -1,6 +1,8 @@
 ﻿using Division42LLC.WebCA.Models;
+using Org.BouncyCastle.OpenSsl;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
@@ -8,6 +10,19 @@ namespace Division42LLC.WebCA.Extensions
 {
     public static class X509Certificate2Extensions
     {
+        //public static String ToCertificatePem(this X509Certificate instance)
+        //{
+        //    using (TextWriter textWriter = new StringWriter())
+        //    {
+        //        PemWriter pemWriter = new PemWriter(textWriter);
+
+        //        pemWriter.WriteObject(instance);
+        //        pemWriter.Writer.Flush();
+
+        //        return textWriter.ToString();
+        //    }
+        //}
+
         /// <summary>
         /// Export a certificate to a PEM format string
         /// </summary>

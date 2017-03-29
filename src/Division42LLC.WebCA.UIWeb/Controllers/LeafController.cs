@@ -34,7 +34,8 @@ namespace Division42LLC.WebCA.UIWeb.Controllers
                     status = "OK",
                     x509certificate = cert,
                     subjectDN = cert.Certificate.ExtractDNFields(),
-                    keySize = $"{cert.Certificate.GetRSAPublicKey().KeySize}-bit"
+                    keySize = $"{cert.Certificate.GetRSAPublicKey().KeySize}-bit",
+                    certificatePem = cert.Certificate.ExportToPEM()
                 };
             }
         }
@@ -43,7 +44,7 @@ namespace Division42LLC.WebCA.UIWeb.Controllers
         [HttpGet("download/{thumbprint}")]
         public ActionResult Download(String thumbprint)
         {
-            Console.WriteLine("GET /api/leaf/download/" + thumbprint);
+            Console.WriteLine("GET /api/leaf/download/" + thumbprint + "/");
 
             String pathAndFilename = Path.Combine(CAStorePathInfo.LeafCertPath, $"{thumbprint}.pfx");
 
@@ -51,13 +52,13 @@ namespace Division42LLC.WebCA.UIWeb.Controllers
             {
                 Response.Headers["Content-Disposition"] =
                     new ContentDispositionHeaderValue("attachment")
-                    {
-                        FileName = $"{thumbprint}.pfx"
-                    }.ToString();
+                    { FileName = $"{thumbprint}.crt" }.ToString();
 
-                return new PhysicalFileResult(
-                    pathAndFilename,
-                    new MediaTypeHeaderValue("application/octet-stream"));
+                X509Certificate2 result = new X509Certificate2(pathAndFilename, null, X509KeyStorageFlags.Exportable);
+
+                Byte[] fileContents = Encoding.UTF8.GetBytes(result.ExportToPEM());
+
+                return new FileContentResult(fileContents, new MediaTypeHeaderValue("application/octet-stream"));
             }
             else
             {
@@ -77,7 +78,7 @@ namespace Division42LLC.WebCA.UIWeb.Controllers
             {
                 Response.Headers["Content-Disposition"] =
                     new ContentDispositionHeaderValue("attachment")
-                    { FileName = $"{thumbprint}.cer" }.ToString();
+                    { FileName = $"{thumbprint}.pub" }.ToString();
 
                 CertificateAndPems result = new CertificateAndPems(new X509Certificate2(pathAndFilename, null, X509KeyStorageFlags.Exportable));
 

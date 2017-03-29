@@ -41,9 +41,9 @@
             </td>
             <td>{{ cert.expiresOn | date:mm/dd/yyyy }}</td>
             <td>
-                <a href="/api/ca/download/public/" class="btn btn-sm btn-primary" title="Download the CA public key in Base64 (.cer) format."><i class="fa fa-download"></i>&nbsp;CA</a>
-                <a href="/api/leaf/download/public/{{cert.thumbprint}}/" class="btn btn-sm btn-primary" title="Download the leaf public key in Base64 (.cer) format."><i class="fa fa-download"></i>&nbsp;Pub</a>
-                <a href="/api/leaf/download/private/{{cert.thumbprint}}/" class="btn btn-sm btn-primary" title="Download the leaf private key in Base64 (.key) format."><i class="fa fa-download"></i>&nbsp;Priv</a>
+                <a href="/api/leaf/download/{{cert.thumbprint}}/" class="btn btn-sm btn-primary" title="Download the leaf certificate in Base64 (.crt) format."><i class="fa fa-download"></i>&nbsp;Cert</a>
+                <a href="/api/leaf/download/private/{{cert.thumbprint}}/" class="btn btn-sm btn-primary" title="Download the leaf private key in Base64 (.key) format."><i class="fa fa-download"></i>&nbsp;Key</a>
+                <a href="/api/ca/download/" class="btn btn-sm btn-primary" title="Download the CA certificate in Base64 (.crt) format."><i class="fa fa-download"></i>&nbsp;CA</a> |
                 <button data-toggle="modal" data-target="#deleteModal" ng-click="setCurrentThumbprint(cert.thumbprint)" class="btn btn-sm btn-danger" style="cursor: pointer"><i class="fa fa-trash"></i></button>
             </td>
         </tr>
