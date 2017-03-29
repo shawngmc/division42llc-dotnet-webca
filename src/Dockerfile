@@ -12,11 +12,7 @@ ADD app-version.txt /app/
 ADD sample-cert.pfx /var/localCA/CA/
 ADD sample-cert.pfx /var/localCA/leaf/
 
-RUN echo "[*] Updating Aptitude..." && \
-    apt-get update && \
-    echo "[*] Installing packages: nano figlet" && \
-    apt-get install nano figlet -y && \
-	cd /src && \
+RUN cd /src && \
 	echo "[*] Building App: dotnet RESTORE starting..." && \
 	dotnet restore && \
 	echo "[*] Building App: dotnet RESTORE completed." && \
@@ -37,24 +33,28 @@ RUN echo "[*] Updating Aptitude..." && \
 	echo "export IMAGE_BUILT=\"`date`\"" >> /etc/profile && \
 	echo "[*] Purging source code..." && \
 	rm -rf /src && \
-    DISK_SPACE_BEFORE=`df -hm | grep "/$" | xargs | cut -d " " -f3` && \
-    echo "[*] Clearing Aptitude cache..." && \
-    apt-get clean -y && \
-    apt-get purge -y && \
-    rm -rf /var/lib/apt/lists/* && \
-    echo "[*] Wiping system log files to reduce image size." && \
-    cat /dev/null > /var/log/alternatives.log && \
-    cat /dev/null > /var/log/apt/history.log && \
-    cat /dev/null > /var/log/apt/term.log && \
-    cat /dev/null > /var/log/bootstrap.log && \
-    cat /dev/null > /var/log/btmp && \
-    cat /dev/null > /var/log/dmesg && \
-    cat /dev/null > /var/log/dpkg.log && \
-    cat /dev/null > /var/log/faillog && \
-    cat /dev/null > /var/log/lastlog && \
-    cat /dev/null > /var/log/wtmp && \
-    DISK_SPACE_AFTER=`df -hm | grep "/$" | xargs | cut -d " " -f3` && \
-    echo "[*] Build run commands finished. [$(($DISK_SPACE_BEFORE - DISK_SPACE_AFTER))mb recovered]"
+	echo "[*] Updating Aptitude..." && \
+	apt-get update && \
+	echo "[*] Installing packages: nano figlet" && \
+	apt-get install nano figlet -y && \
+	DISK_SPACE_BEFORE=`df -hm | grep "/$" | xargs | cut -d " " -f3` && \
+	echo "[*] Clearing Aptitude cache..." && \
+	apt-get clean -y && \
+	apt-get purge -y && \
+	rm -rf /var/lib/apt/lists/* && \
+	echo "[*] Wiping system log files to reduce image size." && \
+	cat /dev/null > /var/log/alternatives.log && \
+	cat /dev/null > /var/log/apt/history.log && \
+	cat /dev/null > /var/log/apt/term.log && \
+	cat /dev/null > /var/log/bootstrap.log && \
+	cat /dev/null > /var/log/btmp && \
+	cat /dev/null > /var/log/dmesg && \
+	cat /dev/null > /var/log/dpkg.log && \
+	cat /dev/null > /var/log/faillog && \
+	cat /dev/null > /var/log/lastlog && \
+	cat /dev/null > /var/log/wtmp && \
+	DISK_SPACE_AFTER=`df -hm | grep "/$" | xargs | cut -d " " -f3` && \
+	echo "[*] Build run commands finished. [$(($DISK_SPACE_BEFORE - DISK_SPACE_AFTER))mb recovered]"
 
     
 

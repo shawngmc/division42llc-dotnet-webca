@@ -5,19 +5,7 @@
     <PackageTargetFallback>portable-net45+win8</PackageTargetFallback>
   </PropertyGroup>
 
-  <PropertyGroup>
-    <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
-  </PropertyGroup>
-
   <ItemGroup>
-    <Content Include="wwwroot\app\Controllers\LeafCertDetailController.js" />
-    <Content Include="wwwroot\app\Controllers\LeafCertsController - Copy.js">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="wwwroot\app\Views\ca - Copy.html">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="wwwroot\app\Views\leaf-detail.html" />
   </ItemGroup>
 
   <ItemGroup>
