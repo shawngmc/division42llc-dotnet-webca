@@ -20,13 +20,13 @@ namespace Division42LLC.WebCA.UIWeb.Controllers
             //$rootScope.uptime = data.uptime;
 
             String applicationName = !String.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("IMAGE_NAME")) ? Environment.GetEnvironmentVariable("IMAGE_NAME") : "[NotInDocker]";
-            String applicationVersion = !String.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("IMAGE_VERSION")) ? Environment.GetEnvironmentVariable("IMAGE_NAME") : "[NotInDocker]";
+            String applicationVersion = !String.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("IMAGE_VERSION")) ? Environment.GetEnvironmentVariable("IMAGE_VERSION") : "[NotInDocker]";
 
             //String applicationName = Environment.GetEnvironmentVariable("IMAGE_NAME");
             //String applicationVersion = Environment.GetEnvironmentVariable("IMAGE_NAME");
 
 
-            DateTime applicationBuilt = new FileInfo(new Uri(System.Reflection.Assembly.GetEntryAssembly().CodeBase, UriKind.Absolute).LocalPath).CreationTime;
+            DateTime applicationBuilt = new FileInfo(new Uri(System.Reflection.Assembly.GetEntryAssembly().CodeBase, UriKind.Absolute).LocalPath).LastWriteTime;
             String hostname = Environment.MachineName;
 
             return new
