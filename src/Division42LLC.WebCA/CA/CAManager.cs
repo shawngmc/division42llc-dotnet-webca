@@ -88,7 +88,13 @@ namespace Division42LLC.WebCA.CA
             String subjectDN = $"CN={name},O={organization},OU={organizationalUnit},L={city},C={countryCode}"; //,ST={stateCode}";
             String[] subjectAlternativeNames = new List<String>().ToArray();
 
-            KeyPurposeID[] usages = new List<KeyPurposeID>() { KeyPurposeID.AnyExtendedKeyUsage }.ToArray();
+            KeyPurposeID[] usages = new List<KeyPurposeID>()
+            {
+                KeyPurposeID.AnyExtendedKeyUsage,
+                KeyPurposeID.IdKPClientAuth,
+                KeyPurposeID.IdKPEmailProtection,
+                KeyPurposeID.IdKPServerAuth
+            }.ToArray();
 
             X509Certificate2 issuerCertificate = GetCACertificate("test").Certificate;
             AsymmetricAlgorithm issuerPrivateKey = issuerCertificate.GetRSAPrivateKey();
