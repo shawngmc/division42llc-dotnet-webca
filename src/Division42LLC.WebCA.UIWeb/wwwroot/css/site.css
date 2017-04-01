@@ -43,6 +43,7 @@ form.bordered {
     background: -o-linear-gradient(#2d8dd1, #52b2f6);
     background: -moz-linear-gradient(#2d8dd1, #52b2f6);
     background: linear-gradient(#2d8dd1, #52b2f6);
+    color: white;
 }
 
 .bg-gradient-brown {
@@ -88,4 +89,27 @@ form.bordered {
 
 .badge-text{
     font-size: .6em !important;
+}
+
+.thumbprint-field {
+    display: none;
+    visibility: hidden;
+}
+@media (min-width: 1200px){
+    .thumbprint-field {
+        display: table-cell !important;
+        visibility: visible !important;
+    }
+}
+
+.list-action-field {
+    display: none;
+    visibility: hidden;
+}
+
+@media (min-width: 768px) {
+    .list-action-field {
+        display: table-cell !important;
+        visibility: visible !important;
+    }
 }

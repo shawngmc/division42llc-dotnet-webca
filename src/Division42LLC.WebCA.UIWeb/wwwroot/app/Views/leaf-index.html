@@ -25,7 +25,7 @@
     <table class="table table-condensed table-bordered table-striped">
         <tr>
             <th>Subject</th>
-            <th>Thumbprint</th>
+            <th class="thumbprint-field">2Thumbprint</th>
             <th colspan="2">Expires</th>
         </tr>
         <tr ng-show="!certs">
@@ -35,12 +35,12 @@
         </tr>
         <tr ng-repeat="cert in certs">
             <td title="{{ cert.distinguishedName }}"><i class="fa fa-certificate"></i>&nbsp;<a href="#/leafcerts/{{ cert.thumbprint }}/details" title="Click to view the certificate details">{{ cert.distinguishedNameDetails.commonName}}</a></td>
-            <td>
+            <td class="thumbprint-field">
                 {{ cert.thumbprint }}<span class="badge badge-pill badge-primary pull-right badge-text" title="This certificate has a {{cert.keySize}} key."> <i class="fa fa-key" aria-hidden="true"></i>&nbsp;{{cert.keySize}}</span>
                 <p class="text-sm text-muted">Serial: {{ cert.serialNumber }}</p>
             </td>
             <td>{{ cert.expiresOn | date:mm/dd/yyyy }}</td>
-            <td>
+            <td class="list-action-field">
                 <a href="/api/leaf/download/{{cert.thumbprint}}/" class="btn btn-sm btn-primary" title="Download the leaf certificate in Base64 (.crt) format."><i class="fa fa-download"></i>&nbsp;Cert</a>
                 <a href="/api/leaf/download/private/{{cert.thumbprint}}/" class="btn btn-sm btn-primary" title="Download the leaf private key in Base64 (.key) format."><i class="fa fa-download"></i>&nbsp;Key</a>
                 <a href="/api/ca/download/" class="btn btn-sm btn-primary" title="Download the CA certificate in Base64 (.crt) format."><i class="fa fa-download"></i>&nbsp;CA</a> |

@@ -1,8 +1,8 @@
-(function() {
+(function () {
 
     var app = angular.module("app", ["ngRoute"]);
 
-    app.config(function($routeProvider) {
+    app.config(function ($routeProvider) {
         $routeProvider
             .when("/", {
                 templateUrl: "/app/Views/home.html",
@@ -27,16 +27,28 @@
             .otherwise({ redirectTo: "/" });
     });
 
-    app.run(function($rootScope, RestService) {
+    app.run(function ($rootScope, RestService) {
 
         RestService.getApplicationDetails()
-            .then(function(data) {
+            .then(function (data) {
                 $rootScope.app_name = data.applicationName;
                 $rootScope.app_version = data.applicationVersion;
                 $rootScope.app_built = data.applicationBuilt;
                 $rootScope.hostname = data.hostname;
                 $rootScope.uptime = data.uptime;
             });
+
+        $rootScope.login = function () {
+            $rootScope.isLoading = true;
+
+            setTimeout(() => {
+                $rootScope.$apply(function () {
+                    $rootScope.loginError = "Unknown username or bad password.";
+                    $rootScope.login.password = "";
+                    $rootScope.isLoading = false;
+                });
+            }, 2000);
+        };
 
         $rootScope.refreshCA = function () {
             RestService.get("/api/ca/get")
@@ -53,5 +65,10 @@
 
         $rootScope.refreshCA();
     });
+
+    // sleep time expects milliseconds
+    function sleep(time) {
+        return new Promise((resolve) => setTimeout(resolve, time));
+    }
 
 }());

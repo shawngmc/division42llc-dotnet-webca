@@ -41,8 +41,8 @@
 
     <nav class="navbar navbar-toggleable-md navbar-inverse bg-primary fixed-top">
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+            <span class="navbar-toggler-icon"></span>
+        </button>
         <a class="navbar-brand" href="#/"><i class="fa fa-lock" aria-hidden="true"></i>&nbsp;webCA</a>
 
         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
@@ -60,10 +60,9 @@
                     <a class="nav-link" href="#/leafcerts/new"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;New Cert</a>
                 </li>
             </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="text" placeholder="Search" disabled>
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit" disabled>Search</button>
-            </form>
+            <span class="navbar-text" data-toggle="modal" data-target="#loginModal" style="cursor: pointer">
+                <i class="fa fa-user"></i>&nbsp;Login
+            </span>
         </div>
     </nav>
 
@@ -77,6 +76,59 @@
         <i class="fa fa-docker" aria-hidden="true"></i>&nbsp;<a href="https://hub.docker.com/r/division42llc/dotnet-webca/" target="_blank">View on Docker Hub</a> | <span title="Image '{{app_name}}' v{{app_version}} built {{app_built}}">Version {{app_version}}</span>
         <div class="pull-right" title="Running in a Docker host as container {{ hostname }}.">Container: {{ hostname }}</div>
     </footer>
+
+
+    <div class="modal fade" id="loginModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-gradient-blue">
+                    <h5 class="modal-title"><i class="fa fa-user"></i> Login</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        To use advanced features of this application, please log in to the system.
+                    </p>
+                    <div ng-show="loginError" class="alert alert-danger">
+                        <i class="fa fa-minus-circle"></i>&nbsp;{{ loginError }}
+                    </div>
+                    <form class="bordered">
+                        <div class="form-group row" ng-class="(login.username ? 'has-success' : 'has-danger')">
+                            <label for="inputUsername" class="col-sm-2 col-form-label">Username:</label>
+                            <div class="col-sm-10">
+                                <input type="email" class="form-control form-control-sm" ng-disabled="isLoading===true"
+                                       ng-class="(login.username ? 'form-control-success' : 'form-control-danger')"
+                                       id="inputUsername" placeholder="(e.g. jdoe@example.com)" required ng-model="login.username">
+                                <small class="form-text text-muted">Please enter your username.</small>
+                            </div>
+                        </div>
+                        <div class="form-group row" ng-class="(login.password ? 'has-success' : 'has-danger')">
+                            <label for="inputPassword" class="col-sm-2 col-form-label">Password:</label>
+                            <div class="col-sm-10">
+                                <input type="password" class="form-control form-control-sm" ng-disabled="isLoading===true"
+                                       ng-class="(login.password ? 'form-control-success' : 'form-control-danger')"
+                                       id="inputPassword" required ng-model="login.password">
+                                <small class="form-text text-muted">Please enter your password.</small>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" ng-click="login()" ng-disabled="!(login.username && login.password) || isLoading===true">
+                        <i class="fa fa-share" aria-hidden="true" ng-hide="isLoading===true"></i>
+                        <i class="fa fa-spinner fa-spin" ng-show="isLoading===true"></i>
+                        Login
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" ng-disabled="isLoading===true"><i class="fa fa-close"></i>&nbsp;Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
 
 </html>
+
