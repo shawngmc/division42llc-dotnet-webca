@@ -90,7 +90,7 @@ namespace Division42LLC.WebCA.CA
 
             KeyPurposeID[] usages = new List<KeyPurposeID>()
             {
-                KeyPurposeID.AnyExtendedKeyUsage,
+                //KeyPurposeID.AnyExtendedKeyUsage,
                 KeyPurposeID.IdKPClientAuth,
                 KeyPurposeID.IdKPEmailProtection,
                 KeyPurposeID.IdKPServerAuth
