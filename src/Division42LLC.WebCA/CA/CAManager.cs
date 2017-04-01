@@ -171,8 +171,8 @@ namespace Division42LLC.WebCA.CA
             String[] subjectAlternativeNames =
                 new List<String>().ToArray();
 
-            KeyPurposeID[] usages =
-                new List<KeyPurposeID>() { KeyPurposeID.AnyExtendedKeyUsage }.ToArray();
+            // NO usages for a CA cert.
+            KeyPurposeID[] usages = new List<KeyPurposeID>().ToArray();
 
             X509Certificate2 certForCA = generator.CreateCertificateAuthorityCertificate(subjectDN, subjectAlternativeNames, usages).Certificate;
 
