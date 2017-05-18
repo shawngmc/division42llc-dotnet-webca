@@ -1,6 +1,6 @@
 # division42llc/dotnet-webca
 Docker Image: microsoft/aspnetcore-build:latest image with a custom CA web 
-application hosted on port 80. This is a web application which hosts a self-signed
+application hosted on port 8080, running as a non-privileged user. This is a web application which hosts a self-signed
 Certificate Authority. You can create/re-create the CA, and issue/delete leaf 
 certificates at-will.
 
@@ -36,12 +36,12 @@ directory, and limiting the container to use only 40MB of RAM (usually runs ~27M
 
 #### On Linux or macOS:
 ```
-$ docker run -d -p 8080:80 -v ~/Desktop/localCA/:/var/localCA/ 
+$ docker run -d -p 8080:8080 -v ~/Desktop/localCA/:/var/localCA/ 
 	--memory=40m division42llc/dotnet-webca
 ```
 #### On Windows:
 ```
-$ docker run -d -p 8080:80 -v %UserProfile%/Desktop/localCA/:/var/localCA/ 
+$ docker run -d -p 8080:8080 -v %UserProfile%/Desktop/localCA/:/var/localCA/ 
 	--memory=40m division42llc/dotnet-webca
 ```
 
@@ -52,19 +52,18 @@ and limiting the container to use only 40MB of RAM (usually runs ~27MB), run:
 
 #### On Linux or macOS:
 ```
-$ docker run -it -p 8080:80 -v ~/Desktop/localCA/:/var/localCA/ 
+$ docker run -it -p 8080:8080 -v ~/Desktop/localCA/:/var/localCA/ 
 	--memory=40m division42llc/dotnet-webca
 ```
 #### On Windows:
 ```
-$ docker run -it -p 8080:80 -v %UserProfile%/Desktop/localCA/:/var/localCA/ 
+$ docker run -it -p 8080:8080 -v %UserProfile%/Desktop/localCA/:/var/localCA/ 
 	--memory=40m division42llc/dotnet-webca
 ```
 
 ## Using the application
-As of this writing, this is not fully-working, yet. You can create/delete/re-create the CA, 
-and it will list certificates in the leaf folder. However, you can't create a leaf certificate
-without getting an error.
+As of this writing, this basically works. You can create/delete/re-create the CA, 
+and it will list certificates in the leaf folder. You can also create/delete/view leaf certificates.
 
 ### Screenshots
 Below are some screenshots of the application. First, working with the CA, itself:

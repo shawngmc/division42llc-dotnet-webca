@@ -60,8 +60,10 @@ RUN cd /src && \
 
 WORKDIR /app
 
-EXPOSE 80
+EXPOSE 8080
 VOLUME /var/localCA
+
+USER 1001
 
 ENTRYPOINT ["/bin/bash", "/usr/local/bin/docker-entrypoint.sh"]
 
