@@ -4,8 +4,6 @@ application hosted on port 8080, running as a non-privileged user. This is a web
 Certificate Authority. You can create/re-create the CA, and issue/delete leaf 
 certificates at-will.
 
->PLEASE NOTE: This application is still not fully-functional.
-
 ## Overview
 The purpose of this project is to make it simple and easy to stand up a new 
 Certificate Authority. That is, a system which can dispense x.509/SSL/TLS "certificates".
