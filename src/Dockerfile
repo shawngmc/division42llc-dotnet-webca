@@ -1,4 +1,4 @@
-FROM microsoft/aspnetcore-build
+FROM microsoft/aspnetcore-build:1.1
 
 LABEL Comment="Standard microsoft/aspnetcore:latest image with a custom CA web application hosted on port 80." \
       Author="Division42 LLC" \
