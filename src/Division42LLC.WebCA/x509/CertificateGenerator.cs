@@ -217,9 +217,9 @@ namespace Division42LLC.WebCA.x509
         {
             var authorityKeyIdentifierExtension =
                 new AuthorityKeyIdentifier(
-                    SubjectPublicKeyInfoFactory.CreateSubjectPublicKeyInfo(issuerKeyPair.Public),
-                    new GeneralNames(new GeneralName(issuerDN)),
-                    issuerSerialNumber);
+                    SubjectPublicKeyInfoFactory.CreateSubjectPublicKeyInfo(issuerKeyPair.Public));
+//                    new GeneralNames(new GeneralName(issuerDN)),
+ //                   issuerSerialNumber);
             certificateGenerator.AddExtension(
                 X509Extensions.AuthorityKeyIdentifier.Id, false, authorityKeyIdentifierExtension);
         }

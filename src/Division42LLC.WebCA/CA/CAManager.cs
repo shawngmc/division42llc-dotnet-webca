@@ -86,7 +86,10 @@ namespace Division42LLC.WebCA.CA
             CertificateGenerator generator = new CertificateGenerator();
 
             String subjectDN = $"CN={name},O={organization},OU={organizationalUnit},L={city},C={countryCode}"; //,ST={stateCode}";
-            String[] subjectAlternativeNames = new List<String>().ToArray();
+            String[] subjectAlternativeNames = new List<String>()
+            {
+                name
+            }.ToArray();
 
             KeyPurposeID[] usages = new List<KeyPurposeID>()
             {
