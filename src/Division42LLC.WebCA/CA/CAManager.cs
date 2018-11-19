@@ -78,7 +78,7 @@ namespace Division42LLC.WebCA.CA
             }
         }
 
-        public void GenerateNewLeafCertificate(string name, string organization, string organizationalUnit, string city, string stateCode, string countryCode, string password, String[] additionalSANs = [])
+        public void GenerateNewLeafCertificate(string name, string organization, string organizationalUnit, string city, string stateCode, string countryCode, string password, string additionalSANs = null)
         {
             if (!Directory.Exists(CAStorePathInfo.CACertPath))
                 Directory.CreateDirectory(CAStorePathInfo.CACertPath);
@@ -91,7 +91,8 @@ namespace Division42LLC.WebCA.CA
                 name
             }
             if (additionalSANs != null) {
-                sanList.addRange(additionalSANs);   
+                string[] moreSANs = additionalSANs.split(',');
+                sanList.addRange(moreSANs);   
             }
             String[] subjectAlternativeNames = sanList.ToArray();
 
