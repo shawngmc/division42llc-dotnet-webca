@@ -89,7 +89,7 @@ namespace Division42LLC.WebCA.CA
             List<String> sanList = new List<String>()
             {
                 name
-            }
+            };
             if (additionalSANs != null) {
                 string[] moreSANs = additionalSANs.split(',');
                 sanList.addRange(moreSANs);   
