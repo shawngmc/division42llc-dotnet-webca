@@ -91,8 +91,8 @@ namespace Division42LLC.WebCA.CA
                 name
             };
             if (additionalSANs != null) {
-                string[] moreSANs = additionalSANs.split(',');
-                sanList.addRange(moreSANs);   
+                string[] moreSANs = additionalSANs.Split(',');
+                sanList.AddRange(moreSANs);   
             }
             String[] subjectAlternativeNames = sanList.ToArray();
 
