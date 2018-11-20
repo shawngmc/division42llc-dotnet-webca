@@ -237,9 +237,9 @@ namespace Division42LLC.WebCA.x509
             List<Asn1Encodable> sanEntries = new List<Asn1Encodable>();
             foreach(string subjectAlternativeName in subjectAlternativeNames) {
                 // Test if an IP Address
-                IPAddress ip;
-                if (IPAddress.TryParse(subjectAlternativeName, ip)) {
-                    sanEntries.Add(new GeneralName(GeneralName.iPAddress, subjectAlternativeName));
+                IPAddress ip = null;
+                if (IPAddress.TryParse(subjectAlternativeName, out ip)) {
+                    sanEntries.Add(new GeneralName(GeneralName.IPAddress, subjectAlternativeName));
                 } else {
                     sanEntries.Add(new GeneralName(GeneralName.DnsName, subjectAlternativeName));
                 }
