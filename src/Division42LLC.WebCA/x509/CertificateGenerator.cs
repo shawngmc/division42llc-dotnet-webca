@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using Org.BouncyCastle.Asn1;
 using Org.BouncyCastle.Asn1.X509;
 using Org.BouncyCastle.Crypto;
@@ -233,10 +234,18 @@ namespace Division42LLC.WebCA.x509
         public void AddSubjectAlternativeNames(X509V3CertificateGenerator certificateGenerator,
                                                        IEnumerable<string> subjectAlternativeNames)
         {
+            List<Asn1Encodable> sanEntries = new List<Asn1Encodable>();
+            foreach(string subjectAlternativeName in subjectAlternativeNames) {
+                // Test if an IP Address
+                IPAddress ip;
+                if (IPAddress.TryParse(subjectAlternativeName, ip)) {
+                    sanEntries.Add(new GeneralName(GeneralName.iPAddress, subjectAlternativeName));
+                } else {
+                    sanEntries.Add(new GeneralName(GeneralName.DnsName, subjectAlternativeName));
+                }
+            }
             var subjectAlternativeNamesExtension =
-                new DerSequence(
-                    subjectAlternativeNames.Select(name => new GeneralName(GeneralName.DnsName, name))
-                                           .ToArray<Asn1Encodable>());
+                new DerSequence(sanEntries.ToArray<Asn1Encodable>());
 
             certificateGenerator.AddExtension(
                 X509Extensions.SubjectAlternativeName.Id, false, subjectAlternativeNamesExtension);
