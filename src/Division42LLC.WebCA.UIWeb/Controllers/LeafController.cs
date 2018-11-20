@@ -169,8 +169,9 @@ namespace Division42LLC.WebCA.UIWeb.Controllers
             String stateCode = request.stateCode;
             String countryCode = request.countryCode;
             String password = null;
+            String additionalSANs = request.additionalSANs;
 
-            caManager.GenerateNewLeafCertificate(name, organization, organizationalUnit, city, stateCode, countryCode, password);
+            caManager.GenerateNewLeafCertificate(name, organization, organizationalUnit, city, stateCode, countryCode, password, additionalSANs);
 
             //return Ok();
 
