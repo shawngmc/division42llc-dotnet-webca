@@ -90,6 +90,7 @@ namespace Division42LLC.WebCA.CA
             {
                 name
             };
+            Console.WriteLine("Additional SANs: " + additionalSANs)
             if (additionalSANs != null) {
                 string[] moreSANs = additionalSANs.Split(',');
                 sanList.AddRange(moreSANs);   
