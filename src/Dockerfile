@@ -54,7 +54,10 @@ RUN cd /src && \
 	cat /dev/null > /var/log/lastlog && \
 	cat /dev/null > /var/log/wtmp && \
 	DISK_SPACE_AFTER=`df -hm | grep "/$" | xargs | cut -d " " -f3` && \
-	echo "[*] Build run commands finished. [$(($DISK_SPACE_BEFORE - DISK_SPACE_AFTER))mb recovered]"
+	echo "[*] Build run commands finished. [$(($DISK_SPACE_BEFORE - DISK_SPACE_AFTER))mb recovered]" && \
+	echo "[*] Setting permissions on /var/localCA" && \
+	mkdir -p /var/localCA/ && \
+	chmod -R 777 /var/localCA
 
     
 
