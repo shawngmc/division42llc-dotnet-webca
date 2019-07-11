@@ -78,7 +78,7 @@ namespace Division42LLC.WebCA.CA
             }
         }
 
-        public void GenerateNewLeafCertificate(string name, string organization, string organizationalUnit, string city, string stateCode, string countryCode, string password)
+        public void GenerateNewLeafCertificate(string name, string organization, string organizationalUnit, string city, string stateCode, string countryCode, string password, string additionalSANs = null)
         {
             if (!Directory.Exists(CAStorePathInfo.CACertPath))
                 Directory.CreateDirectory(CAStorePathInfo.CACertPath);
@@ -86,10 +86,16 @@ namespace Division42LLC.WebCA.CA
             CertificateGenerator generator = new CertificateGenerator();
 
             String subjectDN = $"CN={name},O={organization},OU={organizationalUnit},L={city},C={countryCode}"; //,ST={stateCode}";
-            String[] subjectAlternativeNames = new List<String>()
+            List<String> sanList = new List<String>()
             {
                 name
-            }.ToArray();
+            };
+            Console.WriteLine("Additional SANs: " + additionalSANs);
+            if (additionalSANs != null) {
+                string[] moreSANs = additionalSANs.Split(',');
+                sanList.AddRange(moreSANs);   
+            }
+            String[] subjectAlternativeNames = sanList.ToArray();
 
             KeyPurposeID[] usages = new List<KeyPurposeID>()
             {

@@ -87,6 +87,16 @@
             </div>
         </div>
 
+        <div class="form-group row" ng-class="has-success">
+            <label for="inputAdditionalSANs" class="col-sm-2 col-form-label">Additional SANs</label>
+            <div class="col-sm-10">
+                <input type="string" class="form-control form-control-sm" ng-disabled="isLoading===true"
+                       ng-class="form-control-success"
+                       id="inputAdditionalSANs" placeholder="(e.g. 192.168.1.56,test2.mydomain.com)" required ng-model="request.additionalSANs">
+                <small class="form-text text-muted">Additional Subject Alternative Names this cert should have, comma-seperated; some applications may have special requirements here.</small>
+            </div>
+        </div>
+
         <div class="form-group row">
             <div class="offset-sm-2 col-sm-10">
                 <button class="btn btn-success" title="Click to generate a new leaf certificate now"
