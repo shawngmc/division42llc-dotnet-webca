@@ -144,7 +144,7 @@ namespace Division42LLC.WebCA.x509
 
             // Our certificate needs valid from/to values.
             var notBefore = DateTime.UtcNow.Date;
-            var notAfter = notBefore.AddYears(2);
+            var notAfter = notBefore.AddYears(20);
 
             certificateGenerator.SetNotBefore(notBefore);
             certificateGenerator.SetNotAfter(notAfter);
