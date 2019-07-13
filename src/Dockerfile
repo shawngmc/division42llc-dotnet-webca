@@ -1,4 +1,4 @@
-FROM microsoft-dotnet-core-sdk:2.2 AS build
+FROM mcr.microsoft.com/dotnet/core/core/sdk:2.2 AS build
 
 LABEL Comment="Standard microsoft/aspnetcore:latest image with a custom CA web application hosted on port 80." \
       Author="Division42 LLC" \
@@ -35,7 +35,7 @@ RUN echo "[*] Building App: dotnet PUBLISH starting..." && \
 	echo "export IMAGE_VERSION=$IMAGE_VERSION" >> /etc/profile && \
 	echo "export IMAGE_BUILT=\"`date`\"" >> /etc/profile
 
-FROM microsoft-dotnet-core-aspnet:2.2 AS runtime
+FROM mcr.microsoft.com/dotnet/core/aspnet:2.2 AS runtime
 WORKDIR /app
 COPY --from=build /app/out ./
 COPY --from=build /etc/profile /etc/profile
