@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/core/core/sdk:2.2 AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:2.2 AS build
 
 LABEL Comment="Standard microsoft/aspnetcore:latest image with a custom CA web application hosted on port 80." \
       Author="Division42 LLC" \
