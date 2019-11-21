@@ -13,7 +13,7 @@ jobs:
     - name: Move source folder stuff to root folder
       run: cp -R ./src/* ./
     - name: Generate Tag String
-      run: echo "docker.pkg.github.com/shawngmc/division42llc-dotnet-webca/division42llc-dotnet-webca:$branch-$(date +%s)" >> ./tagname
+      run: echo "docker.pkg.github.com/shawngmc/division42llc-dotnet-webca/division42llc-dotnet-webca:branchname-$branch-$(date +%s)" >> ./tagname
       env:
         branch: ${{secrets.GITHUB_REF}}
     - name: Build the Docker image
