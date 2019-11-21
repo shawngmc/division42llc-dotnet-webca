@@ -14,3 +14,5 @@ jobs:
       run: cp -R ./src/* ./
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag division42llc-dotnet-webca:$(date +%s)
+    - name: Publish package
+      run: docker login docker.pkg.github.com -u shawngmc -p {{secrets.GITHUB_TOKEN}} 
