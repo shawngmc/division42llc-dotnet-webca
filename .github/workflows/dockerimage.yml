@@ -21,4 +21,4 @@ jobs:
     - name: Publish image
       run: docker push $(cat ./tagname)
     - name: Logout
-      run: docker logoff
+      run: docker logout
