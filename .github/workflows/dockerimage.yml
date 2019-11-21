@@ -10,5 +10,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+    - name: Go to src folder
+      run: cd ./src/
     - name: Build the Docker image
-      run: docker build . --file ./src/Dockerfile --tag division42llc-dotnet-webca:$(date +%s)
+      run: docker build . --file Dockerfile --tag division42llc-dotnet-webca:$(date +%s)
