@@ -10,7 +10,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: Go to src folder
-      run: cd ./src/
+    - name: Move source folder stuff to root folder
+      run: cp -R ./src/ ./
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag division42llc-dotnet-webca:$(date +%s)
