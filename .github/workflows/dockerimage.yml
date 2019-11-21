@@ -12,7 +12,11 @@ jobs:
     - uses: actions/checkout@v1
     - name: Move source folder stuff to root folder
       run: cp -R ./src/* ./
+    - name: Generate Tag String
+      run: export WEBCA_TAG=docker.pkg.github.com/shawngmc/division42llc-dotnet-webca/division42llc-dotnet-webca:$(date +%s)
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag division42llc-dotnet-webca:$(date +%s)
-    - name: Publish package
+      run: docker build . --file Dockerfile --tag $WEBCA_TAG
+    - name: Login to publish package
       run: docker login docker.pkg.github.com -u shawngmc -p {{secrets.GITHUB_TOKEN}} 
+    - name: Publish image
+      run: docker push $WEBCA_TAG
