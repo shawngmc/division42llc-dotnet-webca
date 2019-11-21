@@ -13,10 +13,10 @@ jobs:
     - name: Move source folder stuff to root folder
       run: cp -R ./src/* ./
     - name: Generate Tag String
-      run: echo "docker.pkg.github.com/shawngmc/division42llc-dotnet-webca/division42llc-dotnet-webca:{{secrets.GITHUB_REF}}-$(date +%s)" >> ./tagname
+      run: echo "docker.pkg.github.com/shawngmc/division42llc-dotnet-webca/division42llc-dotnet-webca:${{secrets.GITHUB_REF}}-$(date +%s)" >> ./tagname
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag $(cat ./tagname)
     - name: Login to publish package
-      run: docker login docker.pkg.github.com -u shawngmc -p {{secrets.GITHUB_TOKEN}} 
+      run: docker login docker.pkg.github.com -u shawngmc -p ${{secrets.GITHUB_TOKEN}} 
     - name: Publish image
       run: docker push $(cat ./tagname)
