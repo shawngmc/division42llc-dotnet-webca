@@ -1,8 +1,8 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:2.2 AS build
 
 LABEL Comment="Standard microsoft/aspnetcore:latest image with a custom CA web application hosted on port 80." \
-      Author="Division42 LLC" \
-      ImageRepo="https://github.com/Division42LLC/division42llc-dotnet-webca"
+      Author="Shawn McNaughton (forked from Division42 LLC)" \
+      ImageRepo="https://github.com/shawngmc/division42llc-dotnet-webca"
 
 WORKDIR /app
 
@@ -23,7 +23,8 @@ RUN cd /src && \
 
 # Copy remaining content, then publish - will automatically build for us
 COPY . /src/
-RUN echo "[*] Building App: dotnet PUBLISH starting..." && \
+RUN cd ./Division42LLC.WebCA.UIWeb && \
+    echo "[*] Building App: dotnet PUBLISH starting..." && \
 	dotnet publish ./Division42LLC.WebCA.UIWeb.csproj -c Release -o /app/out && \
 	echo "[*] Building App: dotnet PUBLISH completed." && \
 	cd /app && \
