@@ -164,7 +164,7 @@ namespace Division42LLC.WebCA.UIWeb.Controllers
 
             String name = request.fqdn;
             String organization = request.organization;
-            String organizationalUnit = "IT Security";
+            String organizationalUnit = request.organizationalUnit;
             String city = request.city;
             String stateCode = request.stateCode;
             String countryCode = request.countryCode;
