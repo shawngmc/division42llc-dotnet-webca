@@ -23,7 +23,7 @@ RUN cd /src && \
 
 # Copy remaining content, then publish - will automatically build for us
 COPY . /src/
-RUN cd ./Division42LLC.WebCA.UIWeb && \
+RUN cd /src/Division42LLC.WebCA.UIWeb && \
     echo "[*] Building App: dotnet PUBLISH starting..." && \
 	dotnet publish ./Division42LLC.WebCA.UIWeb.csproj -c Release -o /app/out && \
 	echo "[*] Building App: dotnet PUBLISH completed." && \
